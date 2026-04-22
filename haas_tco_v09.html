@@ -2195,13 +2195,121 @@ function initReveal() {
   document.querySelectorAll('.reveal').forEach(el => _revealObs.observe(el));
 }
 
-// ── D: Export / Print ──────────────────────────────────────────────────────
-function exportPDF() {
-  // Unfold all flipped cards back to front for clean print
-  document.querySelectorAll('.tech-card.flipped').forEach(c => c.classList.remove('flipped'));
-  // Make all reveals visible
-  document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-  setTimeout(() => window.print(), 200);
+// ── D: Export / Downloadable PDF ───────────────────────────────────────────
+function loadScriptOnce(src, check) {
+  if (check()) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const existing = Array.from(document.querySelectorAll('script')).find(s => s.src === src);
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error(`Failed loading ${src}`)), { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed loading ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function exportPDF() {
+  const exportBtn = document.querySelector('.export-btn');
+  const oldLabel = exportBtn ? exportBtn.innerHTML : '';
+  const sb = document.getElementById('sidebar');
+  const sbBtn = document.getElementById('sidebar-toggle');
+  const wasCollapsed = sb ? sb.classList.contains('collapsed') : true;
+
+  try {
+    if (exportBtn) {
+      exportBtn.disabled = true;
+      exportBtn.innerHTML = '<span class="exp-icon">...</span> Exporting';
+      exportBtn.style.opacity = '0.75';
+      exportBtn.style.cursor = 'wait';
+    }
+
+    // Keep cards and reveal sections in deterministic state before capture.
+    document.querySelectorAll('.tech-card.flipped').forEach(c => c.classList.remove('flipped'));
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+
+    // Export a clean layout without the side panel.
+    if (sb && !wasCollapsed) {
+      sb.classList.add('collapsed');
+      if (sbBtn) {
+        sbBtn.textContent = '▶';
+        sbBtn.style.left = '0';
+      }
+    }
+
+    await loadScriptOnce(
+      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+      () => typeof window.html2canvas === 'function'
+    );
+    await loadScriptOnce(
+      'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+      () => Boolean(window.jspdf && window.jspdf.jsPDF)
+    );
+
+    await wait(220);
+
+    const captureNode = document.body;
+    const canvas = await window.html2canvas(captureNode, {
+      backgroundColor: getComputedStyle(document.body).backgroundColor,
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      scrollX: 0,
+      scrollY: -window.scrollY,
+      windowWidth: document.documentElement.scrollWidth,
+      windowHeight: document.documentElement.scrollHeight
+    });
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 8;
+    const contentW = pageW - margin * 2;
+    const imgH = (canvas.height * contentW) / canvas.width;
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+
+    let y = margin;
+    let remaining = imgH;
+    pdf.addImage(imgData, 'JPEG', margin, y, contentW, imgH, undefined, 'FAST');
+    remaining -= (pageH - margin * 2);
+
+    while (remaining > 0) {
+      pdf.addPage();
+      y = margin - (imgH - remaining);
+      pdf.addImage(imgData, 'JPEG', margin, y, contentW, imgH, undefined, 'FAST');
+      remaining -= (pageH - margin * 2);
+    }
+
+    const date = new Date().toISOString().slice(0, 10);
+    pdf.save(`ep-heat-cost-calculator-${date}.pdf`);
+  } catch (err) {
+    console.error('PDF export failed:', err);
+    alert('PDF export failed. Please try again.');
+  } finally {
+    if (sb && !wasCollapsed) {
+      sb.classList.remove('collapsed');
+      if (sbBtn) {
+        sbBtn.textContent = '«';
+        sbBtn.style.left = '315px';
+      }
+    }
+    if (exportBtn) {
+      exportBtn.disabled = false;
+      exportBtn.innerHTML = oldLabel;
+      exportBtn.style.opacity = '';
+      exportBtn.style.cursor = '';
+    }
+  }
 }
 
 // ── E: Sparklines on hero cards ────────────────────────────────────────────
