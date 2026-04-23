@@ -3321,6 +3321,115 @@ function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function getActiveScenarioLabel() {
+  if (activeScenario >= 0 && SCENARIO_PRESETS[activeScenario]) {
+    const sc = SCENARIO_PRESETS[activeScenario];
+    return sc[LANG] || sc.en || String(activeScenario);
+  }
+  return LANG === 'zh' ? '自訂' : 'Custom';
+}
+
+function buildActiveSettingsRowsForPdf() {
+  const rows = [];
+  const addSection = (title) => rows.push({ type: 'section', label: title });
+  const addRow = (label, value) => rows.push({ type: 'row', label, value: String(value) });
+
+  addSection(LANG === 'zh' ? '目前狀態' : 'Current State');
+  addRow(LANG === 'zh' ? '情境' : 'Scenario', getActiveScenarioLabel());
+  addRow(LANG === 'zh' ? '模式' : 'Mode', T(LIGHT_MODE ? 'mode_light' : 'mode_full'));
+  addRow(LANG === 'zh' ? '融資模式' : 'Financing', T(FIN_MODE === 'haas' ? 'fin_haas' : 'fin_buy'));
+  addRow(LANG === 'zh' ? '電動車充電' : 'EV Charging', HAS_EV ? (LANG === 'zh' ? '啟用' : 'Enabled') : (LANG === 'zh' ? '停用' : 'Disabled'));
+  addRow(LANG === 'zh' ? 'VPP 啟用' : 'VPP Enabled', VPP_ENABLED ? (LANG === 'zh' ? '啟用' : 'Enabled') : (LANG === 'zh' ? '停用' : 'Disabled'));
+  addRow(LANG === 'zh' ? '建築類型' : 'Building Class', T('bc_' + BC.cls));
+  addRow(LANG === 'zh' ? '居住面積' : 'Living Area', `${BC.area} m2`);
+  addRow(LANG === 'zh' ? '人數' : 'Persons', BC.persons);
+
+  SECTIONS.forEach(sec => {
+    addSection(T(sec.labelKey));
+    sec.params.forEach(p => {
+      addRow(pLabel(p), displayVal(p));
+    });
+  });
+
+  return rows;
+}
+
+function addActiveSettingsTableToPdf(pdf) {
+  const pageW = pdf.internal.pageSize.getWidth();
+  const pageH = pdf.internal.pageSize.getHeight();
+  const margin = 10;
+  const contentW = pageW - margin * 2;
+  const colLabelW = contentW * 0.60;
+  const colValueW = contentW - colLabelW;
+  const lineH = 4.2;
+  const rows = buildActiveSettingsRowsForPdf();
+  const title = LANG === 'zh' ? '目前啟用設定（僅目前情境）' : 'Active Settings (Current Scenario Only)';
+
+  let y = margin;
+  pdf.addPage();
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(14);
+  pdf.text(title, margin, y);
+  y += 6;
+
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(10);
+  const dateTime = new Date().toLocaleString();
+  const scenarioLine = `${LANG === 'zh' ? '情境' : 'Scenario'}: ${getActiveScenarioLabel()}  |  ${LANG === 'zh' ? '匯出時間' : 'Exported'}: ${dateTime}`;
+  pdf.text(scenarioLine, margin, y);
+  y += 6;
+
+  const drawHeader = () => {
+    pdf.setFillColor(230, 235, 242);
+    pdf.rect(margin, y, contentW, 7, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(10);
+    pdf.text(LANG === 'zh' ? '參數' : 'Parameter', margin + 2, y + 4.8);
+    pdf.text(LANG === 'zh' ? '目前值' : 'Current Value', margin + colLabelW + 2, y + 4.8);
+    y += 7;
+  };
+
+  drawHeader();
+
+  rows.forEach(item => {
+    if (item.type === 'section') {
+      if (y + 7 > pageH - margin) {
+        pdf.addPage();
+        y = margin;
+        drawHeader();
+      }
+      pdf.setFillColor(245, 247, 250);
+      pdf.rect(margin, y, contentW, 7, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9.5);
+      pdf.text(item.label, margin + 2, y + 4.8);
+      y += 7;
+      return;
+    }
+
+    const labelLines = pdf.splitTextToSize(item.label, colLabelW - 4);
+    const valueLines = pdf.splitTextToSize(item.value, colValueW - 4);
+    const rowLines = Math.max(labelLines.length, valueLines.length);
+    const rowH = Math.max(6, rowLines * lineH + 2);
+
+    if (y + rowH > pageH - margin) {
+      pdf.addPage();
+      y = margin;
+      drawHeader();
+    }
+
+    pdf.setDrawColor(225, 230, 236);
+    pdf.rect(margin, y, contentW, rowH);
+    pdf.line(margin + colLabelW, y, margin + colLabelW, y + rowH);
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(9);
+    pdf.text(labelLines, margin + 2, y + 4.2);
+    pdf.text(valueLines, margin + colLabelW + 2, y + 4.2);
+    y += rowH;
+  });
+}
+
 async function exportPDF() {
   const exportBtn = document.querySelector('.export-btn');
   const oldLabel = exportBtn ? exportBtn.innerHTML : '';
@@ -3360,23 +3469,23 @@ async function exportPDF() {
 
     await wait(220);
 
-    const captureNode = document.body;
+    const captureNode = document.querySelector('.results') || document.body;
     const canvas = await window.html2canvas(captureNode, {
       backgroundColor: getComputedStyle(document.body).backgroundColor,
-      scale: 2,
+      scale: 3,
       useCORS: true,
       logging: false,
       scrollX: 0,
       scrollY: -window.scrollY,
-      windowWidth: document.documentElement.scrollWidth,
-      windowHeight: document.documentElement.scrollHeight
+      windowWidth: captureNode.scrollWidth,
+      windowHeight: captureNode.scrollHeight
     });
 
     const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
+    const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4', compress: true });
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 8;
+    const margin = 6;
     const contentW = pageW - margin * 2;
     const imgH = (canvas.height * contentW) / canvas.width;
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
@@ -3392,6 +3501,9 @@ async function exportPDF() {
       pdf.addImage(imgData, 'JPEG', margin, y, contentW, imgH, undefined, 'FAST');
       remaining -= (pageH - margin * 2);
     }
+
+    // Attach current active settings for the selected scenario only.
+    addActiveSettingsTableToPdf(pdf);
 
     const date = new Date().toISOString().slice(0, 10);
     pdf.save(`ep-heat-cost-calculator-${date}.pdf`);
