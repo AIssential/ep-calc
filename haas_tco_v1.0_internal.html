@@ -650,7 +650,7 @@ const STRINGS = {
     // Verify
     verify_title: 'Verification against default parameters',
     verify_metric: 'Metric', verify_expected: 'Expected',
-    badge_ok: '✓ All verified', badge_fail: '⚠ Defaults changed',
+    badge_ok: '✓ Admin defaults active', badge_fail: '⚠ User inputs changed',
     // Scenario names
     sc_pessimistic: 'Pessimistic', sc_balanced: 'Balanced', sc_optimistic: 'Optimistic',
     // Preset names
@@ -823,7 +823,7 @@ const STRINGS = {
     dv_capex_gas: '燃氣鍋爐總 CAPEX',
     verify_title: '與預設參數驗證比較',
     verify_metric: '指標', verify_expected: '預期值',
-    badge_ok: '✓ 全部驗證通過', badge_fail: '⚠ 預設值已變更',
+    badge_ok: '✓ 使用管理員預設值', badge_fail: '⚠ 使用者輸入已變更',
     sc_pessimistic: '悲觀', sc_balanced: '均衡', sc_optimistic: '樂觀',
     pr_passivhaus: '被動式房屋', pr_geg2020: 'GEG 2020', pr_bestand1980: '1980年後', pr_altbau: '1978年前',
     bc_0: '被動式房屋',            bc_1: '高效節能 40',         bc_2: '高效節能 55',
@@ -1157,12 +1157,15 @@ function buildAdminConfigSnapshot() {
 const STATUS_QUO_CONFIG = buildAdminConfigSnapshot();
 syncBalancedScenarioWithDefaults();
 
-function isConfigAtStatusQuo() {
-  try {
-    return JSON.stringify(buildAdminConfigSnapshot()) === JSON.stringify(STATUS_QUO_CONFIG);
-  } catch (_) {
-    return true;
-  }
+function isUserStateAtAdminBaseline() {
+  const stateMatchesDefaults = Object.keys(DEFAULTS).every(key => S[key] === DEFAULTS[key]);
+  return stateMatchesDefaults
+    && BC.cls === 5
+    && BC.area === 150
+    && BC.persons === 4
+    && FIN_MODE === 'buy'
+    && HAS_EV === false
+    && VPP_ENABLED === false;
 }
 
 function applyAdminConfigSnapshot(snapshot, opts = {}) {
@@ -2531,9 +2534,9 @@ function renderVerify(res) {
   html += '</tbody>';
   document.getElementById('verify-table').innerHTML = html;
   const badge = document.getElementById('hdr-badge');
-  const configUnchanged = isConfigAtStatusQuo();
-  badge.textContent = configUnchanged ? T('badge_ok') : T('badge_fail');
-  badge.className   = configUnchanged ? 'badge-ok' : 'badge-fail';
+  const userAtBaseline = isUserStateAtAdminBaseline();
+  badge.textContent = userAtBaseline ? T('badge_ok') : T('badge_fail');
+  badge.className   = userAtBaseline ? 'badge-ok' : 'badge-fail';
 }
 
 // ── View toggle ────────────────────────────────────────────────────────────
