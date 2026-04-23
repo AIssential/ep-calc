@@ -523,20 +523,6 @@
         <div class="kv kv-mt"><span class="k" data-i18n="dv_blend_ep">Blended price ElephantONE</span><span class="v" id="dv-blend-ep">—</span></div>
         <div class="kv"><span class="k" data-i18n="dv_blend_hp">Blended price Standard HP</span><span class="v" id="dv-blend-hp">—</span></div>
       </div>
-      <div class="derived-card">
-        <div class="dtitle" data-i18n="dv_energy_demand">Annual Energy Demand</div>
-        <div class="kv"><span class="k" data-i18n="dv_elec_ep">ElephantONE electricity (incl. losses)</span><span class="v" id="dv-elec-ep">—</span></div>
-        <div class="kv"><span class="k" data-i18n="dv_elec_hp">Standard HP electricity</span><span class="v" id="dv-elec-hp">—</span></div>
-        <div class="kv kv-mt"><span class="k" data-i18n="dv_gas_cons">Gas consumption</span><span class="v" id="dv-gas-cons">—</span></div>
-      </div>
-      <div class="derived-card">
-        <div class="dtitle" data-i18n="dv_subsidy_capex">Subsidies &amp; Total Investment</div>
-        <div class="kv"><span class="k" data-i18n="dv_sub_ep">Subsidy ElephantONE</span><span class="v v-ok" id="dv-sub-ep">—</span></div>
-        <div class="kv"><span class="k" data-i18n="dv_sub_hp">Subsidy Standard HP</span><span class="v v-ok" id="dv-sub-hp">—</span></div>
-        <div class="kv kv-mt"><span class="k" data-i18n="dv_capex_ep">Total CAPEX ElephantONE (incl. PV)</span><span class="v" id="dv-capex-ep">—</span></div>
-        <div class="kv"><span class="k" data-i18n="dv_capex_hp">Total CAPEX Standard HP (incl. PV)</span><span class="v" id="dv-capex-hp">—</span></div>
-        <div class="kv"><span class="k" data-i18n="dv_capex_gas">Total CAPEX Gas Boiler</span><span class="v" id="dv-capex-gas">—</span></div>
-      </div>
     </div>
 
     <div class="card">
@@ -607,9 +593,9 @@ const STRINGS = {
     today: 'Today',
     yr: n => `Yr ${n}`,
     // Payback chips
-    pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE: payback yr ${yr} · saves ${sav} over ${lt} yr`,
+    pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE: payback yr ${yr} · saves ${sav} in ${lt} yr compared to gas`,
     pb_ep_none: lt => `ElephantONE: no payback within ${lt} yr`,
-    pb_hp_ok:   (yr, sav, lt) => `🔵 Standard HP: payback yr ${yr} · saves ${sav} over ${lt} yr`,
+    pb_hp_ok:   (yr, sav, lt) => `🔵 Standard HP: payback yr ${yr} · saves ${sav} in ${lt} yr compared to gas`,
     pb_hp_none: lt => `Standard HP: no payback within ${lt} yr`,
     // Tech card
     tc_capex: 'CAPEX', tc_opex: 'OPEX', tc_energy: 'Energy', tc_carbon: 'Carbon',
@@ -785,9 +771,9 @@ const STRINGS = {
     cum_gas_base: '燃氣鍋爐 (基準 €0)',
     today: '今日',
     yr: n => `第 ${n} 年`,
-    pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE：第 ${yr} 年回收 · ${lt} 年節省 ${sav}`,
+    pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE：第 ${yr} 年回收 · ${lt} 年相較燃氣節省 ${sav}`,
     pb_ep_none: lt => `ElephantONE：${lt} 年內未回收`,
-    pb_hp_ok:   (yr, sav, lt) => `🔵 標準熱泵：第 ${yr} 年回收 · ${lt} 年節省 ${sav}`,
+    pb_hp_ok:   (yr, sav, lt) => `🔵 標準熱泵：第 ${yr} 年回收 · ${lt} 年相較燃氣節省 ${sav}`,
     pb_hp_none: lt => `標準熱泵：${lt} 年內未回收`,
     tc_capex: '資本支出', tc_opex: '營運支出', tc_energy: '能源', tc_carbon: '碳排放',
     tc_valstack: '價值堆疊', tc_total: '合計', tc_subsidy: '補貼',
@@ -2248,19 +2234,25 @@ function renderHeroCards(res) {
     // Key params differ by tech (front side)
     let paramsHTML = '';
     if (tech.cls === 'ep') {
-      const capex = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex);
+      const capex = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex + tech.r.pv);
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${capex}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'總 CAPEX（含 PV）':'Total CAPEX (incl. PV)'}</span><span class="tc-pval accent">${capex}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_ep*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_ep.toFixed(1)}</span></div>`;
     } else if (tech.cls === 'hp') {
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'總 CAPEX（含 PV）':'Total CAPEX (incl. PV)'}</span><span class="tc-pval accent">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_hp*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_hp.toFixed(1)}</span></div>`;
     } else {
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'總 CAPEX':'Total CAPEX'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'燃料價格':'Fuel Price'}</span><span class="tc-pval">${(S.gas_price_avg*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'效率':'Efficiency'}</span><span class="tc-pval">${(S.boiler_efficiency*100).toFixed(0)} %</span></div>`;
     }
@@ -2443,7 +2435,7 @@ function renderSavings(res) {
   const card = (tech, color, ann, lif, pct) => {
     const neg = ann < 0, cls = neg ? 'sav-neg' : '';
     return `<div class="sav-card">
-      <h4>${T('sav_vs_gas')} — <span style="color:${color}">${tech}</span></h4>
+      <h4><span style="color:${color}">${tech}</span> — ${T('sav_vs_gas')}</h4>
       <div class="sav-big ${cls}">${ann>=0?'':'-'}${fmtC(Math.abs(ann))}</div>
       <div class="sav-sub">${ann<0?T('sav_more_expensive'):T('sav_per_year')}</div>
       <div class="sav-grid">
@@ -2491,18 +2483,14 @@ function updateVppNote() {}
 
 // ── Derived values ─────────────────────────────────────────────────────────
 function updateDerived(res) {
-  document.getElementById('dv-lcoe-ep').textContent  = res.lcoe_ep.toFixed(4) + ' €/kWh';
-  document.getElementById('dv-lcoe-hp').textContent  = res.lcoe_hp.toFixed(4) + ' €/kWh';
-  document.getElementById('dv-blend-ep').textContent = res.blend_ep.toFixed(4) + ' €/kWh';
-  document.getElementById('dv-blend-hp').textContent = res.blend_hp.toFixed(4) + ' €/kWh';
-  document.getElementById('dv-elec-ep').textContent  = Math.round(res.elec_ep).toLocaleString('de-DE') + ' kWh/a';
-  document.getElementById('dv-elec-hp').textContent  = Math.round(res.elec_hp).toLocaleString('de-DE') + ' kWh/a';
-  document.getElementById('dv-gas-cons').textContent = Math.round(res.gas_cons).toLocaleString('de-DE') + ' kWh/a';
-  document.getElementById('dv-sub-ep').textContent   = fmtC(res.ep.sub);
-  document.getElementById('dv-sub-hp').textContent   = fmtC(res.hp.sub);
-  document.getElementById('dv-capex-ep').textContent = fmtC(res.ep.capex + res.ep.pv);
-  document.getElementById('dv-capex-hp').textContent = fmtC(res.hp.capex + res.hp.pv);
-  document.getElementById('dv-capex-gas').textContent= fmtC(res.gas.capex);
+  const lcoeEp = document.getElementById('dv-lcoe-ep');
+  const lcoeHp = document.getElementById('dv-lcoe-hp');
+  const blendEp = document.getElementById('dv-blend-ep');
+  const blendHp = document.getElementById('dv-blend-hp');
+  if (lcoeEp) lcoeEp.textContent = res.lcoe_ep.toFixed(4) + ' €/kWh';
+  if (lcoeHp) lcoeHp.textContent = res.lcoe_hp.toFixed(4) + ' €/kWh';
+  if (blendEp) blendEp.textContent = res.blend_ep.toFixed(4) + ' €/kWh';
+  if (blendHp) blendHp.textContent = res.blend_hp.toFixed(4) + ' €/kWh';
 }
 
 // ── Verification ───────────────────────────────────────────────────────────
@@ -3549,8 +3537,8 @@ function renderSparklines(res) {
       if (label) label.textContent = LANG === 'zh' ? '基準線' : 'Baseline';
     } else {
       if (label) label.textContent = totalSav >= 0
-        ? (LANG === 'zh' ? `${lt}年省 ${fmtC(totalSav)}` : `saves ${fmtC(totalSav)} in ${lt}yr`)
-        : (LANG === 'zh' ? `${lt}年多 ${fmtC(Math.abs(totalSav))}` : `${fmtC(Math.abs(totalSav))} more in ${lt}yr`);
+        ? (LANG === 'zh' ? `${lt}年相較燃氣節省 ${fmtC(totalSav)}` : `saves ${fmtC(totalSav)} in ${lt} yr compared to gas`)
+        : (LANG === 'zh' ? `${lt}年相較燃氣多花 ${fmtC(Math.abs(totalSav))}` : `${fmtC(Math.abs(totalSav))} more in ${lt} yr compared to gas`);
     }
   });
 }
