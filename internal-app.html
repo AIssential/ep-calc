@@ -573,7 +573,7 @@ const STRINGS = {
     chart_revenue: 'Revenue (EP)',
     chart_revenue_suffix: '  ↓ reduces net cost',
     y_lcoh: 'LCOH  (€/kWh)',
-    y_annual: 'Annual Cost  (€/yr)',
+    y_annual: 'Annual Cost  (€/year)',
     y_lifetime: 'Total Lifetime Cost  (€)',
     net_lcoh: 'Net LCOH',
     net: 'Net',
@@ -591,7 +591,7 @@ const STRINGS = {
     cum_hp_sav: 'Standard HP savings',
     cum_gas_base: 'Gas Boiler (baseline €0)',
     today: 'Today',
-    yr: n => `Yr ${n}`,
+    yr: n => `Year ${n}`,
     // Payback chips
     pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE: payback in year ${yr} · saves ${sav} in ${lt} years compared to Gas Boiler`,
     pb_ep_none: lt => `ElephantONE: no payback within ${lt} years`,
@@ -1004,12 +1004,12 @@ const SECTIONS = [
         tip:{en:'Turnkey PV installation cost per kWp. Does NOT include inverter (separate for Standard HP, integrated in ElephantONE).',zh:'交鑰匙 PV 安裝每 kWp 成本。不含逆變器（標準熱泵另計，ElephantONE 已整合）。'} },
       { key:'inverter_cost',   label:{en:'Inverter Cost (HP only)',zh:'逆變器成本（僅熱泵）'}, val:1200, min:500, max:3000, step:100, unit:'€',
         tip:{en:'Separate string inverter for the Standard HP PV system. Not applicable to ElephantONE (inverter integrated in unit).',zh:'標準熱泵 PV 系統的獨立串列逆變器。不適用於 ElephantONE（逆變器已整合）。'} },
-      { key:'pv_service_cost', label:{en:'PV Service & Insurance/yr',zh:'PV 服務及保險/年'},  val:70, min:30, max:200, step:10, unit:'€/a',
+      { key:'pv_service_cost', label:{en:'PV Service & Insurance/year',zh:'PV 服務及保險/年'},  val:70, min:30, max:200, step:10, unit:'€/a',
         tip:{en:'Annual maintenance, monitoring, and insurance for the PV system.',zh:'PV 系統年度維護、監控及保險。'} },
       { key:'full_load_hours', label:{en:'Full Load Hours',zh:'滿載小時數'},             val:900,   min:700,  max:1200, step:50,    unit:'h',
-        tip:{en:'Equivalent full-power operating hours per year. Germany average: 900–1,050 h/yr depending on location and roof angle.',zh:'年等效滿載運行小時。德國平均：900–1,050 h/yr。'} },
+        tip:{en:'Equivalent full-power operating hours per year. Germany average: 900–1,050 h/year depending on location and roof angle.',zh:'年等效滿載運行小時。德國平均：900–1,050 h/年。'} },
       { key:'degradation_rate',label:{en:'PV Degradation Rate',zh:'PV 衰減率'},          val:0.005, min:0.002,max:0.01, step:0.001, unit:'%', x:100,
-        tip:{en:'Annual output decline due to panel ageing. Modern panels: 0.4–0.6%/yr, older panels up to 0.8%/yr.',zh:'面板老化導致的年產出衰減。現代面板：0.4–0.6%/yr。'} },
+        tip:{en:'Annual output decline due to panel ageing. Modern panels: 0.4–0.6%/year, older panels up to 0.8%/year.',zh:'面板老化導致的年產出衰減。現代面板：0.4–0.6%/年。'} },
       { key:'discount_rate_pv',label:{en:'Discount Rate for PV LCOE',zh:'PV LCOE 折現率'}, val:0.04, min:0.01, max:0.08, step:0.005, unit:'%', x:100,
         tip:{en:'Rate used to discount future PV O&M costs in the LCOE calculation.',zh:'LCOE 計算中用於折現未來 PV 營運維護成本的折現率。'} },
       { key:'pv_lifetime',     label:{en:'PV System Lifetime',zh:'PV 系統壽命'},          val:20,    min:15,   max:30,   step:1,     unit:'yr',
@@ -1022,9 +1022,9 @@ const SECTIONS = [
     params:[
       { key:'dynamic_tariff_rate', label:{en:'Dynamic Tariff Benefit Rate',zh:'動態電價優惠費率'}, val:0.030, min:0.010, max:0.060, step:0.005, unit:'€/kWh',
         tip:{en:'€/kWh saved on total household grid electricity through dynamic tariff vs. fixed contract. Pessimistic ~0.018, Balanced ~0.030, Optimistic ~0.045.',zh:'透過動態電價 vs. 固定合約，每 kWh 家庭電網用電節省金額。悲觀 ≈0.018，均衡 ≈0.030，樂觀 ≈0.045。'} },
-      { key:'vs_22enfg',     label:{en:'§22 EnFG smart meter bonus/yr',zh:'§22 EnFG 智慧電表獎金/年'},  val:0,   min:0, max:120, step:10, unit:'€/a',
-        tip:{en:'Annual smart meter subsidy under §22 EnFG for eligible installations. Typ. 30–80 €/yr.',zh:'§22 EnFG 合格安裝的年度智慧電表補貼。通常 30–80 €/年。'} },
-      { key:'vs_balancing',  label:{en:'Balancing / VPP market revenue/yr',zh:'平衡 / VPP 市場收入/年'}, val:200, min:0, max:600, step:25, unit:'€/a',
+      { key:'vs_22enfg',     label:{en:'§22 EnFG smart meter bonus/year',zh:'§22 EnFG 智慧電表獎金/年'},  val:0,   min:0, max:120, step:10, unit:'€/a',
+        tip:{en:'Annual smart meter subsidy under §22 EnFG for eligible installations. Typical: 30–80 €/year.',zh:'§22 EnFG 合格安裝的年度智慧電表補貼。通常 30–80 €/年。'} },
+      { key:'vs_balancing',  label:{en:'Balancing / VPP market revenue/year',zh:'平衡 / VPP 市場收入/年'}, val:200, min:0, max:600, step:25, unit:'€/a',
         isVppParam: true,
         tip:{en:'Revenue from frequency regulation / balancing market via VPP. When active, §14a is set to 0 (they are mutually exclusive).',zh:'透過 VPP 參與頻率調整/平衡市場的收入。啟用時 §14a 設為 0（互斥）。'} },
     ]
@@ -1042,11 +1042,11 @@ const SECTIONS = [
       { key:'ep_foundation',      label:{en:'Foundation & Groundwork',zh:'地基及土建'},               val:800,  min:300,  max:2000,  step:100, unit:'€' },
       { key:'ep_core_drilling',   label:{en:'Core Drilling + Sealings',zh:'核心鑽孔 + 密封'},        val:800,  min:300,  max:1500,  step:100, unit:'€' },
       { key:'ep_piping',          label:{en:'Piping & Installation',zh:'管路及安裝'},                 val:2300, min:1000, max:5000,  step:100, unit:'€' },
-      { key:'ep_service',         label:{en:'Service Cost/yr',zh:'服務費/年'},                        val:500,  min:200,  max:1000,  step:50,  unit:'€/a' },
-      { key:'ep_warranty',        label:{en:'Warranty/yr',zh:'保固/年'},                              val:50,   min:0,    max:200,   step:10,  unit:'€/a' },
-      { key:'ep_metering',        label:{en:'Metering/yr',zh:'計量/年'},                              val:50,   min:0,    max:150,   step:10,  unit:'€/a' },
-      { key:'ep_spare_parts',     label:{en:'Spare Parts/yr',zh:'備件/年'},                           val:50,   min:0,    max:200,   step:10,  unit:'€/a' },
-      { key:'ep_electricity_base',label:{en:'Electricity Base Price/yr',zh:'電力基本費/年'},           val:170,  min:100,  max:300,   step:10,  unit:'€/a' },
+      { key:'ep_service',         label:{en:'Service Cost/year',zh:'服務費/年'},                        val:500,  min:200,  max:1000,  step:50,  unit:'€/a' },
+      { key:'ep_warranty',        label:{en:'Warranty/year',zh:'保固/年'},                              val:50,   min:0,    max:200,   step:10,  unit:'€/a' },
+      { key:'ep_metering',        label:{en:'Metering/year',zh:'計量/年'},                              val:50,   min:0,    max:150,   step:10,  unit:'€/a' },
+      { key:'ep_spare_parts',     label:{en:'Spare Parts/year',zh:'備件/年'},                           val:50,   min:0,    max:200,   step:10,  unit:'€/a' },
+      { key:'ep_electricity_base',label:{en:'Electricity Base Price/year',zh:'電力基本費/年'},           val:170,  min:100,  max:300,   step:10,  unit:'€/a' },
     ]
   },
   {
@@ -1060,11 +1060,11 @@ const SECTIONS = [
       { key:'hp_foundation',        label:{en:'Foundation & Groundwork',zh:'地基及土建'},            val:2500,  min:1000,  max:5000,  step:250, unit:'€' },
       { key:'hp_core_drilling',     label:{en:'Core Drilling + Sealings',zh:'核心鑽孔 + 密封'},     val:600,   min:200,   max:1500,  step:100, unit:'€' },
       { key:'hp_piping_electrical', label:{en:'Piping & Electrical Installation',zh:'管路及電氣安裝'}, val:3900, min:2000, max:8000, step:100, unit:'€' },
-      { key:'hp_service',           label:{en:'Service Cost/yr',zh:'服務費/年'},                      val:400,   min:200,   max:800,   step:50,  unit:'€/a' },
-      { key:'hp_warranty',          label:{en:'Warranty/yr',zh:'保固/年'},                            val:50,    min:0,     max:200,   step:10,  unit:'€/a' },
-      { key:'hp_metering',          label:{en:'Metering/yr',zh:'計量/年'},                            val:50,    min:0,     max:150,   step:10,  unit:'€/a' },
-      { key:'hp_spare_parts',       label:{en:'Spare Parts/yr',zh:'備件/年'},                         val:50,    min:0,     max:200,   step:10,  unit:'€/a' },
-      { key:'hp_electricity_base',  label:{en:'Electricity Base Price/yr',zh:'電力基本費/年'},         val:170,   min:100,   max:300,   step:10,  unit:'€/a' },
+      { key:'hp_service',           label:{en:'Service Cost/year',zh:'服務費/年'},                      val:400,   min:200,   max:800,   step:50,  unit:'€/a' },
+      { key:'hp_warranty',          label:{en:'Warranty/year',zh:'保固/年'},                            val:50,    min:0,     max:200,   step:10,  unit:'€/a' },
+      { key:'hp_metering',          label:{en:'Metering/year',zh:'計量/年'},                            val:50,    min:0,     max:150,   step:10,  unit:'€/a' },
+      { key:'hp_spare_parts',       label:{en:'Spare Parts/year',zh:'備件/年'},                         val:50,    min:0,     max:200,   step:10,  unit:'€/a' },
+      { key:'hp_electricity_base',  label:{en:'Electricity Base Price/year',zh:'電力基本費/年'},         val:170,   min:100,   max:300,   step:10,  unit:'€/a' },
     ]
   },
   {
@@ -1075,11 +1075,11 @@ const SECTIONS = [
       { key:'gas_heating_calc',   label:{en:'Heating Load Calc & Hydraulic Balancing',zh:'熱負荷計算及水力平衡'}, val:550, min:300, max:1500, step:50, unit:'€' },
       { key:'gas_logistics',      label:{en:'Logistics',zh:'物流'},                                val:250,  min:100,  max:800,   step:50,  unit:'€' },
       { key:'gas_installation',   label:{en:'Installation',zh:'安裝'},                             val:3000, min:1500, max:6000,  step:250, unit:'€' },
-      { key:'gas_service',        label:{en:'Service Cost/yr',zh:'服務費/年'},                       val:200,  min:100,  max:500,   step:25,  unit:'€/a' },
-      { key:'gas_warranty',       label:{en:'Warranty/yr',zh:'保固/年'},                             val:50,   min:0,    max:200,   step:10,  unit:'€/a' },
-      { key:'gas_metering',       label:{en:'Metering/yr',zh:'計量/年'},                             val:50,   min:0,    max:150,   step:10,  unit:'€/a' },
-      { key:'gas_chimney_sweep',  label:{en:'Chimney Sweep/yr',zh:'煙囪清掃/年'},                    val:80,   min:30,   max:200,   step:10,  unit:'€/a' },
-      { key:'gas_base_price',     label:{en:'Gas Base Price/yr',zh:'燃氣基本費/年'},                  val:150,  min:80,   max:300,   step:10,  unit:'€/a' },
+      { key:'gas_service',        label:{en:'Service Cost/year',zh:'服務費/年'},                       val:200,  min:100,  max:500,   step:25,  unit:'€/a' },
+      { key:'gas_warranty',       label:{en:'Warranty/year',zh:'保固/年'},                             val:50,   min:0,    max:200,   step:10,  unit:'€/a' },
+      { key:'gas_metering',       label:{en:'Metering/year',zh:'計量/年'},                             val:50,   min:0,    max:150,   step:10,  unit:'€/a' },
+      { key:'gas_chimney_sweep',  label:{en:'Chimney Sweep/year',zh:'煙囪清掃/年'},                    val:80,   min:30,   max:200,   step:10,  unit:'€/a' },
+      { key:'gas_base_price',     label:{en:'Gas Base Price/year',zh:'燃氣基本費/年'},                  val:150,  min:80,   max:300,   step:10,  unit:'€/a' },
     ]
   },
 ];
@@ -1481,8 +1481,8 @@ function displayVal(p) {
   if (p.unit === '%')       return (v * (p.x||1)).toFixed(p.step < 0.01 ? 2 : 1) + ' %';
   if (p.unit === '€' || p.unit === '€/a' || p.unit === '€/kWp') return fmtC(v);
   if (p.unit === '€/mo')    return fmtC(v) + '/mo';
-  if (p.unit === 'kWh/a')  return v.toLocaleString('de-DE') + ' kWh/a';
-  if (p.unit === 'yr')     return v + ' yr';
+  if (p.unit === 'kWh/a')  return v.toLocaleString('de-DE') + ' kWh/year';
+  if (p.unit === 'yr')     return v + ' years';
   if (p.unit === 'kWp')    return v + ' kWp';
   if (p.unit === 'h')      return v + ' h';
   if (p.unit === '€/kWh')  return v.toFixed(3) + ' €/kWh';
@@ -1686,11 +1686,11 @@ function getValstackCustomHTML() {
     ? '§14a EnWG：可控負載 ≥4.4kW 的電網費用減免。計算方式：電網用電 × 0.040 €/kWh。VPP 啟用時設為 0。'
     : '§14a EnWG: grid fee reduction for controllable loads ≥4.4kW. Calculated as: grid electricity consumed × 0.040 €/kWh (BNetzA average). Set to 0 when VPP is active.';
   const tipArb = LANG === 'zh'
-    ? '年度動態電價節省（基本家庭 3,000 kWh/yr + 熱泵電網用電 + 電動車）。費率由情境或手動設定。'
-    : 'Annual dynamic tariff savings on total household grid electricity (base household 3,000 kWh/yr + heat pump grid consumption + EV if enabled). Rate set by scenario or manually.';
+    ? '年度動態電價節省（基本家庭 3,000 kWh/年 + 熱泵電網用電 + 電動車）。費率由情境或手動設定。'
+    : 'Annual dynamic tariff savings on total household grid electricity (base household 3,000 kWh/year + heat pump grid consumption + EV if enabled). Rate set by scenario or manually.';
   const tipEV = LANG === 'zh'
-    ? '啟用電動車充電。增加約 3,500 kWh/yr 電網用電，可享動態電價節省。'
-    : 'Enable EV (electric vehicle) charging. Adds ~3,500 kWh/yr grid consumption eligible for dynamic tariff savings.';
+    ? '啟用電動車充電。增加約 3,500 kWh/年 電網用電，可享動態電價節省。'
+    : 'Enable EV (electric vehicle) charging. Adds ~3,500 kWh/year grid consumption eligible for dynamic tariff savings.';
   const tipPV = LANG === 'zh'
     ? '透過消耗 PV 電力（以 LCOE）替代電網購電所節省的年度金額。已反映在能源列中。此處僅供透明參考。'
     : 'Annual € saved by consuming PV electricity at LCOE instead of buying from grid. Already reflected in the Energy bar (lower blended price). Shown here for transparency.';
@@ -1727,10 +1727,10 @@ function getValstackCustomHTML() {
 
 function updateValueStackDisplay(res) {
   const el14a = document.getElementById('vs-14a-display');
-  if (el14a) el14a.textContent = fmtC(res.vs_14a_auto) + '/yr' + (VPP_ENABLED ? (LANG === 'zh' ? ' (VPP 啟用 → 0)' : ' (VPP active → 0)') : '');
+  if (el14a) el14a.textContent = fmtC(res.vs_14a_auto) + '/year' + (VPP_ENABLED ? (LANG === 'zh' ? ' (VPP 啟用 → 0)' : ' (VPP active → 0)') : '');
 
   const elArb = document.getElementById('arb-display');
-  if (elArb) elArb.textContent = fmtC(res.arb_auto) + '/yr';
+  if (elArb) elArb.textContent = fmtC(res.arb_auto) + '/year';
 
   const elArb2 = document.getElementById('arb-formula-label');
   if (elArb2) {
@@ -1739,7 +1739,7 @@ function updateValueStackDisplay(res) {
   }
 
   const elPV = document.getElementById('pv-saving-display');
-  if (elPV) elPV.textContent = fmtC(res.pv_saving_ep_annual) + '/yr';
+  if (elPV) elPV.textContent = fmtC(res.pv_saving_ep_annual) + '/year';
 }
 
 function setEV(val) { HAS_EV = val; updateAll(); }
@@ -1776,7 +1776,7 @@ function toggleDetail(secId) {
 // ── Sidebar render ─────────────────────────────────────────────────────────
 function renderPresets() {
   const bar = document.getElementById('preset-bar');
-  const noPresetNote = activePreset === -1 ? `<span class="preset-note">${LANG === 'zh' ? '（未選建築類型，使用預設 18,000 kWh/a）' : '(no building type selected — using default 18,000 kWh/a)'}</span>` : '';
+  const noPresetNote = activePreset === -1 ? `<span class="preset-note">${LANG === 'zh' ? '（未選建築類型，使用預設 18,000 kWh/年）' : '(no building type selected — using default 18,000 kWh/year)'}</span>` : '';
   const presetButtons = PRESETS.map((p,i) => {
     const label = p[LANG] || p.en;
     return `<button class="preset-btn${activePreset === i ? ' active' : ''}" onclick="applyPreset(${i})" title="${label}">${label}</button>`;
@@ -1815,7 +1815,7 @@ function buildingConfigHTML() {
     </div>
     <div class="computed-heat">
       <span class="ch-lbl">${T('bc_computed')}</span>
-      <span class="ch-val" id="computed-heat">${computed.toLocaleString('de-DE')} kWh/a</span>
+      <span class="ch-val" id="computed-heat">${computed.toLocaleString('de-DE')} kWh/year</span>
     </div>
     <div class="build-row" style="margin-top:8px">
       <label>${T('ht_label')}</label>
@@ -1950,7 +1950,7 @@ function syncBCToHeat() {
   S.total_heat = heat;
   const rng = document.getElementById('rng-total_heat'); if (rng) rng.value = heat;
   const val = document.getElementById('val-total_heat'); if (val) val.textContent = displayVal(PARAM_MAP['total_heat']);
-  const ch = document.getElementById('computed-heat');   if (ch) ch.textContent = heat.toLocaleString('de-DE') + ' kWh/a';
+  const ch = document.getElementById('computed-heat');   if (ch) ch.textContent = heat.toLocaleString('de-DE') + ' kWh/year';
   updateAll();
 }
 
@@ -2239,21 +2239,21 @@ function renderHeroCards(res) {
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${capex}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_ep*100).toFixed(1)} ct/kWh</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_ep.toFixed(1)}</span></div>`;
     } else if (tech.cls === 'hp') {
       paramsHTML = `
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_hp*100).toFixed(1)} ct/kWh</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_hp.toFixed(1)}</span></div>`;
     } else {
       paramsHTML = `
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'燃料價格':'Fuel Price'}</span><span class="tc-pval">${(S.gas_price_avg*100).toFixed(1)} ct/kWh</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'效率':'Efficiency'}</span><span class="tc-pval">${(S.boiler_efficiency*100).toFixed(0)} %</span></div>`;
     }
 
@@ -2342,22 +2342,22 @@ function renderHeroCards(res) {
     let opexRows = '';
     if (tech.cls === 'ep') {
       opexRows =
-        dr('Service', fmtC(S.ep_service) + '/yr') +
-        dr('Warranty', fmtC(S.ep_warranty) + '/yr') +
-        dr('Metering', fmtC(S.ep_metering) + '/yr') +
-        dr('Spare Parts', fmtC(S.ep_spare_parts) + '/yr');
+        dr('Service', fmtC(S.ep_service) + '/year') +
+        dr('Warranty', fmtC(S.ep_warranty) + '/year') +
+        dr('Metering', fmtC(S.ep_metering) + '/year') +
+        dr('Spare Parts', fmtC(S.ep_spare_parts) + '/year');
     } else if (tech.cls === 'hp') {
       opexRows =
-        dr('Service', fmtC(S.hp_service) + '/yr') +
-        dr('Warranty', fmtC(S.hp_warranty) + '/yr') +
-        dr('Metering', fmtC(S.hp_metering) + '/yr') +
-        dr('Spare Parts', fmtC(S.hp_spare_parts) + '/yr');
+        dr('Service', fmtC(S.hp_service) + '/year') +
+        dr('Warranty', fmtC(S.hp_warranty) + '/year') +
+        dr('Metering', fmtC(S.hp_metering) + '/year') +
+        dr('Spare Parts', fmtC(S.hp_spare_parts) + '/year');
     } else {
       opexRows =
-        dr('Service', fmtC(S.gas_service) + '/yr') +
-        dr('Warranty', fmtC(S.gas_warranty) + '/yr') +
-        dr('Metering', fmtC(S.gas_metering) + '/yr') +
-        dr('Chimney Sweep', fmtC(S.gas_chimney_sweep) + '/yr');
+        dr('Service', fmtC(S.gas_service) + '/year') +
+        dr('Warranty', fmtC(S.gas_warranty) + '/year') +
+        dr('Metering', fmtC(S.gas_metering) + '/year') +
+        dr('Chimney Sweep', fmtC(S.gas_chimney_sweep) + '/year');
     }
 
     // Energy details
@@ -2365,18 +2365,18 @@ function renderHeroCards(res) {
     if (tech.cls === 'ep') {
       energyRows =
         dr('Electricity (blended)', (res.blend_ep * 100).toFixed(1) + ' ct/kWh') +
-        dr('Consumption', fmtE(res.elec_ep) + ' kWh/yr') +
-        dr('Base Price', fmtC(S.ep_electricity_base) + '/yr');
+        dr('Consumption', fmtE(res.elec_ep) + ' kWh/year') +
+        dr('Base Price', fmtC(S.ep_electricity_base) + '/year');
     } else if (tech.cls === 'hp') {
       energyRows =
         dr('Electricity (blended)', (res.blend_hp * 100).toFixed(1) + ' ct/kWh') +
-        dr('Consumption', fmtE(res.elec_hp) + ' kWh/yr') +
-        dr('Base Price', fmtC(S.hp_electricity_base) + '/yr');
+        dr('Consumption', fmtE(res.elec_hp) + ' kWh/year') +
+        dr('Base Price', fmtC(S.hp_electricity_base) + '/year');
     } else {
       energyRows =
         dr('Gas Price', (S.gas_price_avg * 100).toFixed(1) + ' ct/kWh') +
-        dr('Consumption', fmtE(res.gas_cons) + ' kWh/yr') +
-        dr('Base Price', fmtC(S.gas_base_price) + '/yr');
+        dr('Consumption', fmtE(res.gas_cons) + ' kWh/year') +
+        dr('Base Price', fmtC(S.gas_base_price) + '/year');
     }
 
     // Value stacking (EP only)
@@ -2384,11 +2384,11 @@ function renderHeroCards(res) {
     if (tech.cls === 'ep' && revenueAnn > 0) {
       vsSection = `
         <div class="tc-back-section">
-          <div class="tc-back-section-title">💎 ${LANG==='zh'?'價值疊加':'Value Stacking'} (−${fmtC(revenueAnn)}/yr)</div>
-          ${dr('§14a EnWG', fmtC(res.vs_14a_eff) + '/yr')}
-          ${dr('§22 EnFG', fmtC(S.vs_22enfg) + '/yr')}
-          ${dr('Dynamic Tariff', fmtC(res.arb_auto) + '/yr')}
-          ${VPP_ENABLED ? dr('VPP Balancing', fmtC(S.vs_balancing) + '/yr') : ''}
+          <div class="tc-back-section-title">💎 ${LANG==='zh'?'價值疊加':'Value Stacking'} (−${fmtC(revenueAnn)}/year)</div>
+          ${dr('§14a EnWG', fmtC(res.vs_14a_eff) + '/year')}
+          ${dr('§22 EnFG', fmtC(S.vs_22enfg) + '/year')}
+          ${dr('Dynamic Tariff', fmtC(res.arb_auto) + '/year')}
+          ${VPP_ENABLED ? dr('VPP Balancing', fmtC(S.vs_balancing) + '/year') : ''}
         </div>`;
     }
 
@@ -2398,25 +2398,25 @@ function renderHeroCards(res) {
         <span class="tc-back-close">${LANG==='zh'?'← 返回':'← Back'}</span>
       </div>
       <div class="tc-back-section">
-        <div class="tc-back-section-title">🏗 ${LANG==='zh'?'資本支出':'CAPEX'} (${fmtC(capexAnn)}/yr)</div>
+        <div class="tc-back-section-title">🏗 ${LANG==='zh'?'資本支出':'CAPEX'} (${fmtC(capexAnn)}/year)</div>
         ${capexRows}
       </div>
       <div class="tc-back-section">
-        <div class="tc-back-section-title">🔧 ${LANG==='zh'?'營運費用':'OPEX'} (${fmtC(opexAnn)}/yr)</div>
+        <div class="tc-back-section-title">🔧 ${LANG==='zh'?'營運費用':'OPEX'} (${fmtC(opexAnn)}/year)</div>
         ${opexRows}
       </div>
       <div class="tc-back-section">
-        <div class="tc-back-section-title">⚡ ${LANG==='zh'?'能源':'Energy'} (${fmtC(energyAnn)}/yr)</div>
+        <div class="tc-back-section-title">⚡ ${LANG==='zh'?'能源':'Energy'} (${fmtC(energyAnn)}/year)</div>
         ${energyRows}
       </div>
       ${carbonAnn > 0 ? `<div class="tc-back-section">
-        <div class="tc-back-section-title">🌍 ${LANG==='zh'?'碳成本':'Carbon Cost'} (${fmtC(carbonAnn)}/yr)</div>
-        ${dr('CO₂ Emissions', fmtE(tech.r.co2) + ' kg/yr')}
+        <div class="tc-back-section-title">🌍 ${LANG==='zh'?'碳成本':'Carbon Cost'} (${fmtC(carbonAnn)}/year)</div>
+        ${dr('CO₂ Emissions', fmtE(tech.r.co2) + ' kg/year')}
         ${dr('Carbon Price', S.carbon_price + ' €/tCO₂')}
       </div>` : ''}
       ${vsSection}
       <div style="padding:0 16px 14px">
-        ${drT(LANG==='zh'?'年度總計':'Annual Total', fmtC(totalAnn) + '/yr', tech.cls)}
+        ${drT(LANG==='zh'?'年度總計':'Annual Total', fmtC(totalAnn) + '/year', tech.cls)}
         ${drT(LANG==='zh'?'終身總計':'Lifetime Total (' + lt + ' years)', fmtC(totalAnn * lt), tech.cls)}
       </div>`;
   });
@@ -3213,8 +3213,8 @@ function renderInsights(res) {
     chips.push({
       icon: '⚠️', cls: 'warning',
       text: LANG === 'zh'
-        ? `被動式建築警示：熱需求僅 <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/a</span>，固定安裝成本分攤至每度熱能代價高昂，燃氣鍋爐資本支出優勢顯著`
-        : `Low-demand building: at <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/a</span> heat, fixed purchase costs dominate — EP CAPEX/kWh is <span class="ins-hl">${capexPerKwhEP} €/kWh</span> compared to Gas Boiler <span class="ins-hl">${capexPerKwhGas} €/kWh</span>`
+        ? `被動式建築警示：熱需求僅 <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/年</span>，固定安裝成本分攤至每度熱能代價高昂，燃氣鍋爐資本支出優勢顯著`
+        : `Low-demand building: at <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/year</span> heat, fixed purchase costs dominate — EP CAPEX/kWh is <span class="ins-hl">${capexPerKwhEP} €/kWh</span> compared to Gas Boiler <span class="ins-hl">${capexPerKwhGas} €/kWh</span>`
     });
   }
 
