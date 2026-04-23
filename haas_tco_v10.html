@@ -42,7 +42,7 @@
     /* Sidebar */
     .sidebar{width:315px;min-width:260px;overflow-y:auto;background:var(--surface);border-right:1px solid var(--border);flex-shrink:0;transition:width .25s ease,min-width .25s ease,padding .25s ease}
     .sidebar.collapsed{width:0;min-width:0;padding:0;overflow:hidden;border-right:none}
-    .sidebar-toggle{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:20;width:28px;height:72px;background:var(--surface2);border:1px solid var(--border);border-left:none;border-radius:0 8px 8px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px;transition:left .25s ease;box-shadow:2px 0 6px rgba(0,0,0,.3)}
+    .sidebar-toggle{position:absolute;left:0;top:50%;transform:translateY(-50%);z-index:20;width:36px;height:96px;background:#7DB7FF;border:1px solid #5E9DF0;border-left:none;border-radius:0 8px 8px 0;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#0B1120;font-size:20px;transition:left .25s ease;box-shadow:2px 0 6px rgba(0,0,0,.3)}
     .sidebar-toggle:hover{background:var(--accent);color:#0B1120;box-shadow:2px 0 10px rgba(48,201,111,.35)}
     .preset-bar{display:flex;gap:4px;flex-wrap:wrap;padding:6px 20px;border-top:1px solid var(--border);background:var(--surface);align-items:center}
     .preset-note{display:block;margin-top:6px;font-size:.67rem;line-height:1.3;color:var(--muted);white-space:normal;font-style:italic}
@@ -55,8 +55,9 @@
     #sidebar-inner{padding:8px;overflow-y:auto}
 
     /* Sidebar top: mode + presets */
-    .sidebar-modebar{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0}
-    .sidebar-modebar-lbl{font-size:.6rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .sidebar-modebar{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0}
+    .sidebar-mode-group{display:flex;align-items:center;gap:10px;flex:1;padding-left:4px}
+    .sidebar-modebar-lbl{font-size:.6rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
     .sidebar .preset-bar{padding:8px 10px;border-top:none;border-bottom:1px solid var(--border)}
 
     .section{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden}
@@ -301,7 +302,7 @@
     .tech-card.gas .tc-sparkline-label{color:var(--muted)}
 
     /* === Admin Area === */
-    .admin-btn{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:40px;height:40px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .15s,border-color .15s;color:var(--muted)}
+    .admin-btn{width:36px;height:36px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:background .15s,border-color .15s;color:var(--muted);flex-shrink:0}
     .admin-btn:hover{background:var(--accent);border-color:var(--accent);color:#0B1120}
     .admin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
     .admin-modal.open{display:flex}
@@ -317,8 +318,13 @@
     .admin-table td{padding:8px;border-bottom:1px solid var(--border);color:var(--text)}
     .admin-table input{width:100%;padding:4px 6px;border:1px solid var(--border);border-radius:3px;background:var(--surface2);color:var(--text);font-size:.68rem;font-family:monospace}
     .admin-table input:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+    .admin-table input.admin-readonly{opacity:.75;background:var(--surface);cursor:not-allowed}
     .admin-param-name{font-weight:600;color:var(--text);max-width:200px}
     .admin-buttons{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+    .admin-btn-status{padding:6px 16px;background:#7DB7FF;color:#0B1120;border:1px solid #5E9DF0;border-radius:4px;cursor:pointer;font-weight:700;font-size:.72rem;margin-right:auto}
+    .admin-btn-status:hover{filter:brightness(0.96)}
+    .admin-btn-remote{padding:6px 12px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-weight:700;font-size:.72rem}
+    .admin-btn-remote:hover{background:var(--border)}
     .admin-btn-save{padding:6px 16px;background:var(--accent);color:#0B1120;border:none;border-radius:4px;cursor:pointer;font-weight:700;font-size:.72rem}
     .admin-btn-save:hover{opacity:.9}
     .admin-btn-cancel{padding:6px 16px;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:4px;cursor:pointer;font-weight:700;font-size:.72rem}
@@ -370,7 +376,7 @@
         box-shadow:0 18px 40px rgba(0,0,0,.45)
       }
       .sidebar.collapsed{width:0;min-width:0;box-shadow:none}
-      .sidebar-toggle{top:18px;transform:none;width:34px;height:48px;border-radius:0 8px 8px 0;font-size:16px}
+      .sidebar-toggle{top:18px;transform:none;width:42px;height:64px;border-radius:0 8px 8px 0;font-size:18px}
     }
 
     /* Phone portrait */
@@ -425,15 +431,17 @@
   <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle controls sidebar" onclick="toggleSidebar()">▶</button>
   <div class="sidebar collapsed" id="sidebar">
     <div class="sidebar-modebar">
-      <span class="sidebar-modebar-lbl" data-i18n="mode_hint">Mode</span>
-      <div class="toggle-pill">
-        <button id="btn-light" class="tpill-btn active-mode" data-i18n="mode_light" onclick="setMode('light')">Light</button>
-        <button id="btn-full"  class="tpill-btn"             data-i18n="mode_full"  onclick="setMode('full')">Full</button>
+      <button class="admin-btn" id="admin-btn" title="Admin Settings" onclick="openAdminModal()">⚙️</button>
+      <div class="sidebar-mode-group">
+        <span class="sidebar-modebar-lbl" data-i18n="mode_hint">Mode</span>
+        <div class="toggle-pill">
+          <button id="btn-light" class="tpill-btn active-mode" data-i18n="mode_light" onclick="setMode('light')">Light</button>
+          <button id="btn-full"  class="tpill-btn"             data-i18n="mode_full"  onclick="setMode('full')">Full</button>
+        </div>
       </div>
     </div>
     <div class="preset-bar" id="preset-bar"></div>
     <div id="sidebar-inner"></div>
-    <button class="admin-btn" id="admin-btn" title="Admin Settings" onclick="openAdminModal()">⚙️</button>
   </div>
 
   <div class="results">
@@ -664,6 +672,7 @@ const STRINGS = {
     admin_title: 'Admin Configuration',
     admin_password_prompt: 'Enter Password',
     admin_password_error: 'Incorrect Password',
+    admin_login: 'Login',
     admin_parameter: 'Parameter',
     admin_min: 'Min',
     admin_max: 'Max',
@@ -671,6 +680,17 @@ const STRINGS = {
     admin_pessimistic: 'Pessimistic',
     admin_balanced: 'Balanced',
     admin_optimistic: 'Optimistic',
+    admin_balanced_locked: 'Balanced follows Default',
+    admin_status_quo: 'Status quo',
+    admin_status_quo_confirm: 'Restore all admin settings to Status quo?',
+    admin_status_quo_success: 'Status quo restored.',
+    admin_load_remote: 'Load Remote',
+    admin_export_json: 'Export JSON',
+    admin_remote_loaded: 'Remote configuration loaded.',
+    admin_remote_missing: 'No remote configuration found at admin-config.json.',
+    admin_remote_error: 'Failed to load remote configuration.',
+    admin_export_success: 'Configuration JSON downloaded.',
+    admin_publish_hint: 'Tip: publish admin-config.json to apply globally for all users.',
     admin_save: 'Save Configuration',
     admin_cancel: 'Cancel',
     admin_validation_error: 'Validation Error',
@@ -679,6 +699,18 @@ const STRINGS = {
     admin_validation_zero: 'Zero value not allowed for',
     admin_save_success: 'Configuration saved successfully!',
     admin_save_error: 'Error saving configuration',
+    admin_api_endpoint: 'API Endpoint (optional)',
+    admin_api_token: 'API Token (optional)',
+    admin_api_post_attempt: 'Attempting to save to server...',
+    admin_api_post_success: 'Configuration posted to server!',
+    admin_api_post_failed: 'Server post failed, saved locally and exported.',
+    admin_api_invalid_endpoint: 'Invalid API endpoint URL',
+    admin_github_token: 'GitHub Token (for auto-commit)',
+    admin_github_repo: 'GitHub Repo (owner/repo)',
+    admin_github_storage_hint: 'Stored with browser-side encryption on this device only. Use a token limited to Actions workflow dispatch if possible.',
+    admin_github_commit_attempt: 'Syncing to GitHub...',
+    admin_github_commit_success: 'Config synced to GitHub!',
+    admin_github_commit_failed: 'GitHub sync failed, saved locally.',
   },
   zh: {
     title: 'ElephantONE vs 標準熱泵 vs 燃氣鍋爐 — TCO / LCOH 計算器',
@@ -787,6 +819,7 @@ const STRINGS = {
     admin_title: '管理員配置',
     admin_password_prompt: '輸入密碼',
     admin_password_error: '密碼不正確',
+    admin_login: '登入',
     admin_parameter: '參數',
     admin_min: '最小值',
     admin_max: '最大值',
@@ -794,6 +827,17 @@ const STRINGS = {
     admin_pessimistic: '悲觀',
     admin_balanced: '均衡',
     admin_optimistic: '樂觀',
+    admin_balanced_locked: '均衡值跟隨預設值',
+    admin_status_quo: '現狀',
+    admin_status_quo_confirm: '將所有管理設定還原為現狀？',
+    admin_status_quo_success: '已還原為現狀。',
+    admin_load_remote: '載入遠端',
+    admin_export_json: '匯出 JSON',
+    admin_remote_loaded: '已載入遠端配置。',
+    admin_remote_missing: '在 admin-config.json 找不到遠端配置。',
+    admin_remote_error: '載入遠端配置失敗。',
+    admin_export_success: '配置 JSON 已下載。',
+    admin_publish_hint: '提示：發布 admin-config.json 後可全域套用給所有使用者。',
     admin_save: '保存配置',
     admin_cancel: '取消',
     admin_validation_error: '驗證錯誤',
@@ -802,6 +846,18 @@ const STRINGS = {
     admin_validation_zero: '不允許零值',
     admin_save_success: '配置已成功保存！',
     admin_save_error: '保存配置時出錯',
+    admin_api_endpoint: '應用程序接口端點 (可選)',
+    admin_api_token: '應用程序接口令牌 (可選)',
+    admin_api_post_attempt: '嘗試保存到伺服器...',
+    admin_api_post_success: '配置已發佈到伺服器！',
+    admin_api_post_failed: '伺服器發佈失敗，本地保存併導出。',
+    admin_api_invalid_endpoint: '無效的應用程序接口端點網址',
+    admin_github_token: 'GitHub 令牌 (自動提交)',
+    admin_github_repo: 'GitHub 倉庫 (所有者/倉庫)',
+    admin_github_storage_hint: '僅在此裝置上以瀏覽器端加密方式保存。建議使用僅限 Actions 工作流程觸發的令牌。',
+    admin_github_commit_attempt: '同步到 GitHub...',
+    admin_github_commit_success: '配置已同步到 GitHub！',
+    admin_github_commit_failed: 'GitHub 同步失敗，本地保存。',
   }
 };
 
@@ -992,6 +1048,21 @@ const SECTIONS = [
 const DEFAULTS = {};
 SECTIONS.forEach(s => s.params.forEach(p => { DEFAULTS[p.key] = p.val; }));
 const S = { ...DEFAULTS };
+const ADMIN_CONFIG_STORAGE_KEY = 'haas_admin_config_v1';
+const ADMIN_REMOTE_CONFIG_URL = 'admin-config.json';
+const ADMIN_API_ENDPOINT_KEY = 'haas_admin_api_endpoint';
+const ADMIN_API_TOKEN_KEY = 'haas_admin_api_token';
+let ADMIN_API_ENDPOINT = localStorage.getItem(ADMIN_API_ENDPOINT_KEY) || '';
+let ADMIN_API_TOKEN = localStorage.getItem(ADMIN_API_TOKEN_KEY) || '';
+
+const GITHUB_TOKEN_KEY = 'haas_github_token_enc';
+const GITHUB_REPO_KEY = 'haas_github_repo';
+const ADMIN_SECRET_DB_NAME = 'haas-admin-secrets';
+const ADMIN_SECRET_STORE = 'secrets';
+const GITHUB_TOKEN_SECRET_ID = 'github-token-key';
+const GITHUB_WORKFLOW_FILE = 'publish-admin-config.yml';
+let GITHUB_TOKEN = '';
+let GITHUB_REPO = normalizeGitHubRepo(localStorage.getItem(GITHUB_REPO_KEY) || 'AIssential/ep-calc');
 
 const BC = { cls:5, area:150, persons:4 };
 
@@ -1003,6 +1074,313 @@ let LIGHT_MODE = localStorage.getItem('haas_mode') !== 'full';
 
 const PARAM_MAP = {};
 SECTIONS.forEach(s => s.params.forEach(p => { PARAM_MAP[p.key] = p; }));
+
+function syncBalancedScenarioWithDefaults() {
+  Object.keys(DEFAULTS).forEach(k => {
+    SCENARIO_PRESETS[1].params[k] = DEFAULTS[k];
+  });
+}
+
+function buildAdminConfigSnapshot() {
+  const ranges = {};
+  const defaults = {};
+  const scenarios = [{},{},{}];
+  SECTIONS.forEach(sec => {
+    if (sec.buildingConfig) return;
+    sec.params.forEach(p => {
+      const key = p.key;
+      ranges[key] = { min: p.min, max: p.max };
+      defaults[key] = DEFAULTS[key];
+      scenarios[0][key] = SCENARIO_PRESETS[0].params[key] !== undefined ? SCENARIO_PRESETS[0].params[key] : DEFAULTS[key];
+      // Balanced is always tied to Default by design.
+      scenarios[1][key] = DEFAULTS[key];
+      scenarios[2][key] = SCENARIO_PRESETS[2].params[key] !== undefined ? SCENARIO_PRESETS[2].params[key] : DEFAULTS[key];
+    });
+  });
+  return { version: 1, ranges, defaults, scenarios };
+}
+
+const STATUS_QUO_CONFIG = buildAdminConfigSnapshot();
+syncBalancedScenarioWithDefaults();
+
+function applyAdminConfigSnapshot(snapshot, opts = {}) {
+  if (!snapshot || !snapshot.ranges || !snapshot.defaults || !Array.isArray(snapshot.scenarios) || snapshot.scenarios.length < 3) return false;
+
+  SECTIONS.forEach(sec => {
+    if (sec.buildingConfig) return;
+    sec.params.forEach(p => {
+      const key = p.key;
+      const r = snapshot.ranges[key];
+      const d = snapshot.defaults[key];
+      if (r && Number.isFinite(r.min) && Number.isFinite(r.max) && r.max >= r.min) {
+        p.min = r.min;
+        p.max = r.max;
+      }
+      if (Number.isFinite(d)) {
+        DEFAULTS[key] = d;
+        p.val = d;
+      }
+
+      const s0 = snapshot.scenarios[0] ? snapshot.scenarios[0][key] : undefined;
+      const s2 = snapshot.scenarios[2] ? snapshot.scenarios[2][key] : undefined;
+      if (Number.isFinite(s0)) SCENARIO_PRESETS[0].params[key] = s0;
+      SCENARIO_PRESETS[1].params[key] = DEFAULTS[key];
+      if (Number.isFinite(s2)) SCENARIO_PRESETS[2].params[key] = s2;
+    });
+  });
+
+  if (opts.resetState) {
+    Object.assign(S, DEFAULTS);
+    activeScenario = 1;
+    activePreset = -1;
+    BC.cls = 5;
+    BC.area = 150;
+    BC.persons = 4;
+  }
+  return true;
+}
+
+function persistAdminConfig() {
+  try {
+    localStorage.setItem(ADMIN_CONFIG_STORAGE_KEY, JSON.stringify(buildAdminConfigSnapshot()));
+  } catch (_) {}
+}
+
+function loadPersistedAdminConfig() {
+  try {
+    const raw = localStorage.getItem(ADMIN_CONFIG_STORAGE_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return applyAdminConfigSnapshot(parsed, { resetState: true });
+  } catch (_) {
+    return false;
+  }
+}
+
+function clearPersistedAdminConfig() {
+  try {
+    localStorage.removeItem(ADMIN_CONFIG_STORAGE_KEY);
+  } catch (_) {}
+}
+
+async function loadRemoteAdminConfig() {
+  try {
+    const response = await fetch(ADMIN_REMOTE_CONFIG_URL, { cache: 'no-store' });
+    if (!response.ok) return false;
+    const parsed = await response.json();
+    return applyAdminConfigSnapshot(parsed, { resetState: true });
+  } catch (_) {
+    return false;
+  }
+}
+
+function downloadAdminConfigPayload() {
+  const payload = JSON.stringify(buildAdminConfigSnapshot(), null, 2);
+  const blob = new Blob([payload], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'admin-config.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function postAdminConfigToAPI(endpoint, token) {
+  if (!endpoint || !endpoint.trim()) return null;
+  
+  try {
+    const url = endpoint.trim();
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      console.warn(T('admin_api_invalid_endpoint'));
+      return null;
+    }
+    
+    const payload = buildAdminConfigSnapshot();
+    const headers = { 'Content-Type': 'application/json' };
+    if (token && token.trim()) {
+      headers['Authorization'] = `Bearer ${token.trim()}`;
+    }
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload),
+      cache: 'no-cache'
+    });
+    
+    if (!response.ok) {
+      console.warn(`API POST failed with status ${response.status}`);
+      return null;
+    }
+    
+    return { success: true, message: response.statusText };
+  } catch (err) {
+    console.warn('API POST error:', err);
+    return null;
+  }
+}
+
+function openSecretsDb() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(ADMIN_SECRET_DB_NAME, 1);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(ADMIN_SECRET_STORE)) {
+        db.createObjectStore(ADMIN_SECRET_STORE);
+      }
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function readSecretValue(key) {
+  const db = await openSecretsDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ADMIN_SECRET_STORE, 'readonly');
+    const store = tx.objectStore(ADMIN_SECRET_STORE);
+    const request = store.get(key);
+    request.onsuccess = () => {
+      db.close();
+      resolve(request.result ?? null);
+    };
+    request.onerror = () => {
+      db.close();
+      reject(request.error);
+    };
+  });
+}
+
+async function writeSecretValue(key, value) {
+  const db = await openSecretsDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(ADMIN_SECRET_STORE, 'readwrite');
+    const store = tx.objectStore(ADMIN_SECRET_STORE);
+    const request = store.put(value, key);
+    request.onsuccess = () => {
+      db.close();
+      resolve();
+    };
+    request.onerror = () => {
+      db.close();
+      reject(request.error);
+    };
+  });
+}
+
+async function getGitHubTokenKey() {
+  let key = await readSecretValue(GITHUB_TOKEN_SECRET_ID);
+  if (key) return key;
+  key = await crypto.subtle.generateKey(
+    { name: 'AES-GCM', length: 256 },
+    false,
+    ['encrypt', 'decrypt']
+  );
+  await writeSecretValue(GITHUB_TOKEN_SECRET_ID, key);
+  return key;
+}
+
+function bytesToBase64(bytes) {
+  return btoa(String.fromCharCode(...bytes));
+}
+
+function base64ToBytes(value) {
+  const decoded = atob(value);
+  return Uint8Array.from(decoded, char => char.charCodeAt(0));
+}
+
+async function encryptToken(plaintext) {
+  if (!plaintext) return '';
+  try {
+    const key = await getGitHubTokenKey();
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encoded = new TextEncoder().encode(plaintext);
+    const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded);
+    const ciphertext = new Uint8Array(encrypted);
+    const payload = new Uint8Array(iv.length + ciphertext.length);
+    payload.set(iv, 0);
+    payload.set(ciphertext, iv.length);
+    return bytesToBase64(payload);
+  } catch {
+    return '';
+  }
+}
+
+async function decryptToken(encoded) {
+  if (!encoded) return '';
+  try {
+    const key = await getGitHubTokenKey();
+    const payload = base64ToBytes(encoded);
+    const iv = payload.slice(0, 12);
+    const ciphertext = payload.slice(12);
+    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, ciphertext);
+    return new TextDecoder().decode(decrypted);
+  } catch {
+    return '';
+  }
+}
+
+async function loadStoredGitHubToken() {
+  GITHUB_TOKEN = await decryptToken(localStorage.getItem(GITHUB_TOKEN_KEY) || '');
+  return GITHUB_TOKEN;
+}
+
+function normalizeGitHubRepo(input) {
+  if (!input) return '';
+  const trimmed = input.trim().replace(/\.git$/i, '');
+  const urlMatch = trimmed.match(/^https?:\/\/github\.com\/([^/]+)\/([^/]+)$/i);
+  if (urlMatch) {
+    return `${urlMatch[1]}/${urlMatch[2]}`;
+  }
+  const repoMatch = trimmed.match(/^([^/]+)\/([^/]+)$/);
+  if (repoMatch) {
+    return `${repoMatch[1]}/${repoMatch[2]}`;
+  }
+  return '';
+}
+
+async function commitConfigToGitHub(token, repo) {
+  if (!token || !token.trim() || !repo || !repo.trim()) return null;
+  
+  try {
+    const normalizedRepo = normalizeGitHubRepo(repo);
+    const [owner, repoName] = normalizedRepo.split('/');
+    if (!owner || !repoName) return null;
+    
+    const payload = buildAdminConfigSnapshot();
+    const encodedConfig = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+    const dispatchUrl = `https://api.github.com/repos/${owner}/${repoName}/actions/workflows/${GITHUB_WORKFLOW_FILE}/dispatches`;
+    const dispatchPayload = {
+      ref: 'main',
+      inputs: {
+        config_base64: encodedConfig
+      }
+    };
+
+    const dispatchResponse = await fetch(dispatchUrl, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token.trim()}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(dispatchPayload),
+      cache: 'no-cache'
+    });
+    
+    if (!dispatchResponse.ok) {
+      console.warn(`GitHub workflow dispatch failed with status ${dispatchResponse.status}`);
+      return null;
+    }
+    
+    return { success: true };
+  } catch (err) {
+    console.warn('GitHub commit error:', err);
+    return null;
+  }
+}
 
 // ── Helpers for bilingual fields ───────────────────────────────────────────
 function pLabel(p) { return (typeof p.label === 'object') ? (p.label[LANG] || p.label.en) : p.label; }
@@ -2152,7 +2530,7 @@ function openAdminModal() {
     body.innerHTML = `
       <div class="admin-password-form">
         <input type="password" id="admin-pw" class="admin-password-input" placeholder="${T('admin_password_prompt')}" onkeypress="if(event.key==='Enter') authenticateAdmin()">
-        <button onclick="authenticateAdmin()" style="padding:6px 16px;background:var(--accent);color:#0B1120;border:none;border-radius:4px;cursor:pointer;font-weight:700">${T('admin_save')}</button>
+        <button onclick="authenticateAdmin()" style="padding:6px 16px;background:var(--accent);color:#0B1120;border:none;border-radius:4px;cursor:pointer;font-weight:700">${T('admin_login')}</button>
         <div id="pw-error"></div>
       </div>`;
     modal.classList.add('open');
@@ -2201,7 +2579,7 @@ function renderAdminTable() {
       const paramKey = p.key;
       const paramLabel = pLabel(p);
       const scPessimistic = SCENARIO_PRESETS[0].params[paramKey] !== undefined ? SCENARIO_PRESETS[0].params[paramKey] : DEFAULTS[paramKey];
-      const scBalanced = SCENARIO_PRESETS[1].params[paramKey] !== undefined ? SCENARIO_PRESETS[1].params[paramKey] : DEFAULTS[paramKey];
+      const scBalanced = DEFAULTS[paramKey];
       const scOptimistic = SCENARIO_PRESETS[2].params[paramKey] !== undefined ? SCENARIO_PRESETS[2].params[paramKey] : DEFAULTS[paramKey];
       
       html += `<tr>
@@ -2210,22 +2588,43 @@ function renderAdminTable() {
         <td><input type="number" id="admin-max-${paramKey}" value="${p.max}" step="${p.step}"></td>
         <td><input type="number" id="admin-def-${paramKey}" value="${DEFAULTS[paramKey]}" step="${p.step}"></td>
         <td><input type="number" id="admin-pess-${paramKey}" value="${scPessimistic}" step="${p.step}"></td>
-        <td><input type="number" id="admin-bal-${paramKey}" value="${scBalanced}" step="${p.step}"></td>
+        <td><input type="number" id="admin-bal-${paramKey}" value="${scBalanced}" step="${p.step}" readonly aria-readonly="true" class="admin-readonly" title="${T('admin_balanced_locked')}"></td>
         <td><input type="number" id="admin-opt-${paramKey}" value="${scOptimistic}" step="${p.step}"></td>
       </tr>`;
     });
   });
   
   html += `</tbody></table>
+    <div style="margin-top:16px;padding:12px;background:var(--surface2);border-radius:4px;border-left:3px solid var(--accent)">
+      <div style="margin-bottom:8px"><label style="display:block;margin-bottom:4px;font-size:.8rem;font-weight:700;color:var(--muted)">${T('admin_api_endpoint')}</label><input type="text" id="admin-api-endpoint" value="${ADMIN_API_ENDPOINT}" placeholder="https://api.example.com/admin-config" style="width:100%;padding:6px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+      <div style="margin-bottom:8px"><label style="display:block;margin-bottom:4px;font-size:.8rem;font-weight:700;color:var(--muted)">${T('admin_api_token')}</label><input type="password" id="admin-api-token" value="${ADMIN_API_TOKEN}" placeholder="Bearer token (optional)" style="width:100%;padding:6px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+      <div style="margin-bottom:8px"><label style="display:block;margin-bottom:4px;font-size:.8rem;font-weight:700;color:var(--muted)">${T('admin_github_token')}</label><input type="password" id="admin-github-token" value="${GITHUB_TOKEN}" placeholder="ghp_xxxxx (GitHub Personal Access Token)" style="width:100%;padding:6px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+      <div style="margin-bottom:8px;color:var(--muted);font-size:.64rem">${T('admin_github_storage_hint')}</div>
+      <div><label style="display:block;margin-bottom:4px;font-size:.8rem;font-weight:700;color:var(--muted)">${T('admin_github_repo')}</label><input type="text" id="admin-github-repo" value="${GITHUB_REPO}" placeholder="owner/repo" style="width:100%;padding:6px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
+    </div>
     <div class="admin-buttons">
+      <button class="admin-btn-status" onclick="restoreStatusQuoConfig()">${T('admin_status_quo')}</button>
+      <button class="admin-btn-remote" onclick="loadRemoteConfigFromAdmin()">${T('admin_load_remote')}</button>
+      <button class="admin-btn-remote" onclick="exportAdminConfigJson()">${T('admin_export_json')}</button>
       <button class="admin-btn-cancel" onclick="closeAdminModal()">${T('admin_cancel')}</button>
       <button class="admin-btn-save" onclick="saveAdminConfig()">${T('admin_save')}</button>
     </div>`;
+  html += `<div style="margin-top:8px;color:var(--muted);font-size:.64rem">${T('admin_publish_hint')} — GitHub ${T('admin_github_commit_attempt').toLowerCase()}</div>`;
   
   body.innerHTML = html;
 }
 
-function saveAdminConfig() {
+function refreshUiAfterConfigChange() {
+  Object.assign(S, DEFAULTS);
+  activeScenario = 1;
+  activePreset = -1;
+  renderSidebar();
+  renderScenarioBar();
+  renderPresets();
+  updateAll();
+}
+
+async function saveAdminConfig() {
   const errors = [];
   const newDefaults = {};
   const newScenarios = [{},{},{}];
@@ -2239,7 +2638,7 @@ function saveAdminConfig() {
       const maxVal = parseFloat(document.getElementById(`admin-max-${paramKey}`).value);
       const defVal = parseFloat(document.getElementById(`admin-def-${paramKey}`).value);
       const pessVal = parseFloat(document.getElementById(`admin-pess-${paramKey}`).value);
-      const balVal = parseFloat(document.getElementById(`admin-bal-${paramKey}`).value);
+      const balVal = defVal;
       const optVal = parseFloat(document.getElementById(`admin-opt-${paramKey}`).value);
       
       // Check for negative values where not allowed
@@ -2248,7 +2647,6 @@ function saveAdminConfig() {
         if (maxVal < 0) errors.push(`${T('admin_validation_negative')}: ${pLabel(p)} (max)`);
         if (defVal < 0) errors.push(`${T('admin_validation_negative')}: ${pLabel(p)} (default)`);
         if (pessVal < 0) errors.push(`${T('admin_validation_negative')}: ${pLabel(p)} (pessimistic)`);
-        if (balVal < 0) errors.push(`${T('admin_validation_negative')}: ${pLabel(p)} (balanced)`);
         if (optVal < 0) errors.push(`${T('admin_validation_negative')}: ${pLabel(p)} (optimistic)`);
       }
       
@@ -2287,12 +2685,93 @@ function saveAdminConfig() {
         if (newDefaults[p.key] !== undefined) p.val = newDefaults[p.key];
       });
     });
+
+    // Save API endpoint and token to localStorage
+    const newApiEndpoint = document.getElementById('admin-api-endpoint').value || '';
+    const newApiToken = document.getElementById('admin-api-token').value || '';
+    ADMIN_API_ENDPOINT = newApiEndpoint;
+    ADMIN_API_TOKEN = newApiToken;
+    if (newApiEndpoint) localStorage.setItem(ADMIN_API_ENDPOINT_KEY, newApiEndpoint);
+    if (newApiToken) localStorage.setItem(ADMIN_API_TOKEN_KEY, newApiToken);
+
+    // Save GitHub credentials to localStorage
+    const newGithubToken = document.getElementById('admin-github-token').value || '';
+    const newGithubRepo = normalizeGitHubRepo(document.getElementById('admin-github-repo').value || '');
+    GITHUB_TOKEN = newGithubToken;
+    GITHUB_REPO = newGithubRepo;
+    if (newGithubToken) {
+      const encryptedGitHubToken = await encryptToken(newGithubToken);
+      if (encryptedGitHubToken) {
+        localStorage.setItem(GITHUB_TOKEN_KEY, encryptedGitHubToken);
+      } else {
+        localStorage.removeItem(GITHUB_TOKEN_KEY);
+      }
+    } else {
+      localStorage.removeItem(GITHUB_TOKEN_KEY);
+    }
+    if (newGithubRepo) {
+      localStorage.setItem(GITHUB_REPO_KEY, newGithubRepo);
+    } else {
+      localStorage.removeItem(GITHUB_REPO_KEY);
+    }
+
+    // Persist config locally
+    persistAdminConfig();
+    refreshUiAfterConfigChange();
     
-    alert(T('admin_save_success'));
+    // Priority: GitHub > API > Local
+    if (GITHUB_TOKEN && GITHUB_TOKEN.trim() && GITHUB_REPO && GITHUB_REPO.trim()) {
+      const result = await commitConfigToGitHub(GITHUB_TOKEN, GITHUB_REPO);
+      if (result && result.success) {
+        alert(T('admin_github_commit_success'));
+      } else {
+        alert(T('admin_github_commit_failed'));
+      }
+    } else if (ADMIN_API_ENDPOINT && ADMIN_API_ENDPOINT.trim()) {
+      const result = await postAdminConfigToAPI(ADMIN_API_ENDPOINT, ADMIN_API_TOKEN);
+      if (result && result.success) {
+        alert(T('admin_api_post_success'));
+      } else {
+        alert(T('admin_api_post_failed'));
+      }
+    } else {
+      alert(T('admin_save_success'));
+    }
     closeAdminModal();
     adminAuthenticated = false;
   } catch (err) {
     alert(T('admin_save_error'));
+  }
+}
+
+function restoreStatusQuoConfig() {
+  if (!confirm(T('admin_status_quo_confirm'))) return;
+
+  applyAdminConfigSnapshot(STATUS_QUO_CONFIG, { resetState: true });
+  clearPersistedAdminConfig();
+  renderAdminTable();
+  refreshUiAfterConfigChange();
+  alert(T('admin_status_quo_success'));
+}
+
+async function loadRemoteConfigFromAdmin() {
+  const loaded = await loadRemoteAdminConfig();
+  if (!loaded) {
+    alert(T('admin_remote_missing'));
+    return;
+  }
+  persistAdminConfig();
+  renderAdminTable();
+  refreshUiAfterConfigChange();
+  alert(T('admin_remote_loaded'));
+}
+
+function exportAdminConfigJson() {
+  try {
+    downloadAdminConfigPayload();
+    alert(T('admin_export_success'));
+  } catch (_) {
+    alert(T('admin_remote_error'));
   }
 }
 
@@ -2714,7 +3193,15 @@ function toggleTheme() {
 // (Set via applyTheme in boot)
 
 // ── Boot ───────────────────────────────────────────────────────────────────
-(function() {
+(async function() {
+  await loadStoredGitHubToken();
+  const remoteLoaded = await loadRemoteAdminConfig();
+  if (!remoteLoaded) {
+    loadPersistedAdminConfig();
+  } else {
+    persistAdminConfig();
+  }
+
   // Restore theme
   applyTheme(localStorage.getItem('haas_theme') || 'dark');
 

@@ -1,0 +1,48 @@
+name: Publish Admin Config
+
+on:
+  workflow_dispatch:
+    inputs:
+      config_base64:
+        description: Base64-encoded admin-config.json payload
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Write admin config
+        shell: bash
+        env:
+          CONFIG_BASE64: ${{ inputs.config_base64 }}
+        run: |
+          python - <<'PY'
+          import base64
+          import os
+          from pathlib import Path
+
+          payload = os.environ['CONFIG_BASE64']
+          content = base64.b64decode(payload).decode('utf-8')
+          Path('admin-config.json').write_text(content, encoding='utf-8')
+          PY
+
+      - name: Commit admin config if changed
+        shell: bash
+        run: |
+          if git diff --quiet -- admin-config.json; then
+            echo "No admin config changes to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin-config.json
+          git commit -m "Update admin config"
+          git push
