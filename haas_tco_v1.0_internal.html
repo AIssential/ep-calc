@@ -1157,6 +1157,14 @@ function buildAdminConfigSnapshot() {
 const STATUS_QUO_CONFIG = buildAdminConfigSnapshot();
 syncBalancedScenarioWithDefaults();
 
+function isConfigAtStatusQuo() {
+  try {
+    return JSON.stringify(buildAdminConfigSnapshot()) === JSON.stringify(STATUS_QUO_CONFIG);
+  } catch (_) {
+    return true;
+  }
+}
+
 function applyAdminConfigSnapshot(snapshot, opts = {}) {
   if (!snapshot || !snapshot.ranges || !snapshot.defaults || !Array.isArray(snapshot.scenarios) || snapshot.scenarios.length < 3) return false;
 
@@ -2523,8 +2531,9 @@ function renderVerify(res) {
   html += '</tbody>';
   document.getElementById('verify-table').innerHTML = html;
   const badge = document.getElementById('hdr-badge');
-  badge.textContent = allOk ? T('badge_ok') : T('badge_fail');
-  badge.className   = allOk ? 'badge-ok' : 'badge-fail';
+  const configUnchanged = isConfigAtStatusQuo();
+  badge.textContent = configUnchanged ? T('badge_ok') : T('badge_fail');
+  badge.className   = configUnchanged ? 'badge-ok' : 'badge-fail';
 }
 
 // ── View toggle ────────────────────────────────────────────────────────────
