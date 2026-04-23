@@ -3459,48 +3459,72 @@ async function exportPDF() {
     }
 
     await loadScriptOnce(
-      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-      () => typeof window.html2canvas === 'function'
-    );
-    await loadScriptOnce(
       'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
       () => Boolean(window.jspdf && window.jspdf.jsPDF)
     );
-
-    await wait(220);
-
-    const captureNode = document.querySelector('.results') || document.body;
-    const canvas = await window.html2canvas(captureNode, {
-      backgroundColor: getComputedStyle(document.body).backgroundColor,
-      scale: 3,
-      useCORS: true,
-      logging: false,
-      scrollX: 0,
-      scrollY: -window.scrollY,
-      windowWidth: captureNode.scrollWidth,
-      windowHeight: captureNode.scrollHeight
-    });
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4', compress: true });
     const pageW = pdf.internal.pageSize.getWidth();
     const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 6;
-    const contentW = pageW - margin * 2;
-    const imgH = (canvas.height * contentW) / canvas.width;
-    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const margin = 10;
 
-    let y = margin;
-    let remaining = imgH;
-    pdf.addImage(imgData, 'JPEG', margin, y, contentW, imgH, undefined, 'FAST');
-    remaining -= (pageH - margin * 2);
+    // Summary page: crisp text + chart canvases (avoids broken full-page screenshots).
+    const res = calculate(S);
+    const lt = S.lifetime;
+    const summary = [
+      { n: T('bar_ep'), c: '#30C96F', lcoh: res.ep.t, monthly: res.ep.t * S.total_heat / 12, life: res.ep.t * S.total_heat * lt },
+      { n: T('bar_hp'), c: '#F5A623', lcoh: res.hp.t, monthly: res.hp.t * S.total_heat / 12, life: res.hp.t * S.total_heat * lt },
+      { n: T('bar_gas'), c: '#EF6B4A', lcoh: res.gas.t, monthly: res.gas.t * S.total_heat / 12, life: res.gas.t * S.total_heat * lt },
+    ];
 
-    while (remaining > 0) {
-      pdf.addPage();
-      y = margin - (imgH - remaining);
-      pdf.addImage(imgData, 'JPEG', margin, y, contentW, imgH, undefined, 'FAST');
-      remaining -= (pageH - margin * 2);
-    }
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(16);
+    pdf.text('EP Heat Cost Calculator - Export', margin, margin);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
+    pdf.text(`${LANG === 'zh' ? '情境' : 'Scenario'}: ${getActiveScenarioLabel()}   |   ${LANG === 'zh' ? '匯出時間' : 'Exported'}: ${new Date().toLocaleString()}`, margin, margin + 6);
+
+    let y = margin + 14;
+    const rowH = 8;
+    pdf.setFillColor(230, 235, 242);
+    pdf.rect(margin, y, pageW - margin * 2, rowH, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Technology', margin + 2, y + 5.3);
+    pdf.text('LCOH (ct/kWh)', margin + 60, y + 5.3);
+    pdf.text('Monthly Cost', margin + 105, y + 5.3);
+    pdf.text(`Lifetime (${lt} years)`, margin + 150, y + 5.3);
+    y += rowH;
+
+    pdf.setFont('helvetica', 'normal');
+    summary.forEach(s => {
+      pdf.setDrawColor(225, 230, 236);
+      pdf.rect(margin, y, pageW - margin * 2, rowH);
+      pdf.setTextColor(s.c);
+      pdf.text(s.n, margin + 2, y + 5.3);
+      pdf.setTextColor('#111111');
+      pdf.text((s.lcoh * 100).toFixed(2), margin + 60, y + 5.3);
+      pdf.text(fmtC(s.monthly) + '/month', margin + 105, y + 5.3);
+      pdf.text(fmtC(s.life), margin + 150, y + 5.3);
+      y += rowH;
+    });
+
+    const chartTop = y + 6;
+    const chartW = (pageW - margin * 3) / 2;
+    const chartH = Math.max(65, pageH - chartTop - margin);
+
+    const addChart = (id, x, title) => {
+      const canvas = document.getElementById(id);
+      if (!canvas || typeof canvas.toDataURL !== 'function') return;
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.text(title, x, chartTop - 2);
+      const img = canvas.toDataURL('image/png');
+      pdf.addImage(img, 'PNG', x, chartTop, chartW, chartH, undefined, 'FAST');
+    };
+
+    addChart('lcohChart', margin, T('lcoh_title'));
+    addChart('cumChart', margin * 2 + chartW, T('cum_title'));
 
     // Attach current active settings for the selected scenario only.
     addActiveSettingsTableToPdf(pdf);
