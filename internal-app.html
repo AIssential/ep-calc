@@ -481,11 +481,11 @@
       <div class="card">
         <div class="card-hdr">
           <div>
-            <span class="card-title" data-i18n="cum_title">Break-even &amp; Payback vs. Gas Boiler</span>
+            <span class="card-title" data-i18n="cum_title">Break-even &amp; Payback compared to Gas Boiler</span>
             <div id="payback-chips" class="payback-chips"></div>
           </div>
           <div class="cum-vt-grp">
-            <button class="cum-vt-btn active" data-cmode="savings" data-i18n="cum_savings">Savings vs Gas</button>
+            <button class="cum-vt-btn active" data-cmode="savings" data-i18n="cum_savings">Savings compared to Gas Boiler</button>
             <button class="cum-vt-btn" data-cmode="absolute" data-i18n="cum_absolute">Absolute Costs</button>
           </div>
         </div>
@@ -582,10 +582,10 @@ const STRINGS = {
     bar_hp: 'Standard HP',
     bar_gas: 'Gas Boiler',
     // Cumulative
-    cum_title: 'Break-even & Payback vs. Gas Boiler',
-    cum_savings: 'Savings vs Gas',
+    cum_title: 'Break-even & Payback compared to Gas Boiler',
+    cum_savings: 'Savings compared to Gas Boiler',
     cum_absolute: 'Absolute Costs',
-    cum_y_savings: 'Cumulative Savings vs. Gas (€)',
+    cum_y_savings: 'Cumulative Savings compared to Gas Boiler (€)',
     cum_y_absolute: 'Cumulative Cost (€)',
     cum_ep_sav: 'ElephantONE savings',
     cum_hp_sav: 'Standard HP savings',
@@ -593,25 +593,25 @@ const STRINGS = {
     today: 'Today',
     yr: n => `Yr ${n}`,
     // Payback chips
-    pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE: payback yr ${yr} · saves ${sav} in ${lt} yr compared to gas`,
-    pb_ep_none: lt => `ElephantONE: no payback within ${lt} yr`,
-    pb_hp_ok:   (yr, sav, lt) => `🔵 Standard HP: payback yr ${yr} · saves ${sav} in ${lt} yr compared to gas`,
-    pb_hp_none: lt => `Standard HP: no payback within ${lt} yr`,
+    pb_ep_ok:   (yr, sav, lt) => `⚡ ElephantONE: payback in year ${yr} · saves ${sav} in ${lt} years compared to Gas Boiler`,
+    pb_ep_none: lt => `ElephantONE: no payback within ${lt} years`,
+    pb_hp_ok:   (yr, sav, lt) => `🔵 Standard HP: payback in year ${yr} · saves ${sav} in ${lt} years compared to Gas Boiler`,
+    pb_hp_none: lt => `Standard HP: no payback within ${lt} years`,
     // Tech card
     tc_capex: 'CAPEX', tc_opex: 'OPEX', tc_energy: 'Energy', tc_carbon: 'Carbon',
     tc_valstack: 'Value stacking', tc_total: 'Total', tc_subsidy: 'Subsidy',
     tc_haas_note: 'HaaS lease mode active',
     // Savings
-    sav_vs_gas: 'vs. Gas Boiler',
+    sav_vs_gas: 'compared to Gas Boiler',
     sav_per_year: 'per year',
     sav_more_expensive: 'per year — more expensive',
-    sav_over: n => `Over ${n} yr`,
+    sav_over: n => `Over ${n} years`,
     sav_cost_reduction: 'Cost reduction',
     // CO₂
     co2_title: 'CO₂ Emissions',
     co2_per_year: 'per year',
-    co2_over: (kg, n) => `${kg} over ${n} yr`,
-    co2_vs_gas: pct => `−${pct}% vs gas`,
+    co2_over: (kg, n) => `${kg} over ${n} years`,
+    co2_vs_gas: pct => `−${pct}% compared to Gas Boiler`,
     co2_baseline: 'baseline',
     co2_note_prefix: 'Grid electricity',
     co2_note_gas: 'Natural gas',
@@ -778,7 +778,7 @@ const STRINGS = {
     tc_capex: '資本支出', tc_opex: '營運支出', tc_energy: '能源', tc_carbon: '碳排放',
     tc_valstack: '價值堆疊', tc_total: '合計', tc_subsidy: '補貼',
     tc_haas_note: 'HaaS 租賃模式啟用中',
-    sav_vs_gas: 'vs. 燃氣鍋爐',
+    sav_vs_gas: '相較燃氣鍋爐',
     sav_per_year: '每年',
     sav_more_expensive: '每年 — 更昂貴',
     sav_over: n => `${n} 年累計`,
@@ -786,7 +786,7 @@ const STRINGS = {
     co2_title: 'CO₂ 排放',
     co2_per_year: '每年',
     co2_over: (kg, n) => `${n} 年共 ${kg}`,
-    co2_vs_gas: pct => `−${pct}% vs 燃氣`,
+    co2_vs_gas: pct => `−${pct}% 相較燃氣鍋爐`,
     co2_baseline: '基準',
     co2_note_prefix: '電網電力',
     co2_note_gas: '天然氣',
@@ -2236,24 +2236,24 @@ function renderHeroCards(res) {
     if (tech.cls === 'ep') {
       const capex = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex + tech.r.pv);
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${capex}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'總 CAPEX（含 PV）':'Total CAPEX (incl. PV)'}</span><span class="tc-pval accent">${capex}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_ep*100).toFixed(1)} ct/kWh</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/a</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_ep.toFixed(1)}</span></div>`;
     } else if (tech.cls === 'hp') {
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'總 CAPEX（含 PV）':'Total CAPEX (incl. PV)'}</span><span class="tc-pval accent">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_hp*100).toFixed(1)} ct/kWh</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/a</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_hp.toFixed(1)}</span></div>`;
     } else {
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/a</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'總 CAPEX':'Total CAPEX'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'燃料價格':'Fuel Price'}</span><span class="tc-pval">${(S.gas_price_avg*100).toFixed(1)} ct/kWh</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/a</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'效率':'Efficiency'}</span><span class="tc-pval">${(S.boiler_efficiency*100).toFixed(0)} %</span></div>`;
     }
 
@@ -2280,7 +2280,7 @@ function renderHeroCards(res) {
       </div>
       <div class="tc-sparkline" id="spark-${tech.cls}">
         <canvas width="200" height="32"></canvas>
-        <span class="tc-sparkline-label">vs Gas</span>
+        <span class="tc-sparkline-label">compared to Gas Boiler</span>
       </div>
       <div class="tc-divider"></div>
       <div class="tc-params">${paramsHTML}</div>
@@ -2417,7 +2417,7 @@ function renderHeroCards(res) {
       ${vsSection}
       <div style="padding:0 16px 14px">
         ${drT(LANG==='zh'?'年度總計':'Annual Total', fmtC(totalAnn) + '/yr', tech.cls)}
-        ${drT(LANG==='zh'?'終身總計':'Lifetime Total (' + lt + 'yr)', fmtC(totalAnn * lt), tech.cls)}
+        ${drT(LANG==='zh'?'終身總計':'Lifetime Total (' + lt + ' years)', fmtC(totalAnn * lt), tech.cls)}
       </div>`;
   });
   renderSparklines(res);
@@ -3214,7 +3214,7 @@ function renderInsights(res) {
       icon: '⚠️', cls: 'warning',
       text: LANG === 'zh'
         ? `被動式建築警示：熱需求僅 <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/a</span>，固定安裝成本分攤至每度熱能代價高昂，燃氣鍋爐資本支出優勢顯著`
-        : `Low-demand building: at <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/a</span> heat, fixed install costs dominate — EP CAPEX/kWh is <span class="ins-hl">${capexPerKwhEP} €/kWh</span> vs gas <span class="ins-hl">${capexPerKwhGas} €/kWh</span>`
+        : `Low-demand building: at <span class="ins-hl">${S.total_heat.toLocaleString('de-DE')} kWh/a</span> heat, fixed purchase costs dominate — EP CAPEX/kWh is <span class="ins-hl">${capexPerKwhEP} €/kWh</span> compared to Gas Boiler <span class="ins-hl">${capexPerKwhGas} €/kWh</span>`
     });
   }
 
@@ -3230,31 +3230,31 @@ function renderInsights(res) {
     const epCapexDiff = (res.ep.capex + res.ep.pv - res.ep.sub) - (res.hp.capex + res.hp.pv - res.hp.sub);
     if (epAnnSav > 0 && epCapexDiff <= 0) {
       // EP cheaper upfront AND cheaper annually → already wins from day 1
-      chips.push({ icon:'📈', text: LANG==='zh' ? `ElephantONE 安裝成本更低且每年也更省：<span class="ins-hl">一開始就更划算</span>` : `ElephantONE has lower install cost <em>and</em> lower annual cost: <span class="ins-hl">cheaper from day one</span>` });
+      chips.push({ icon:'📈', text: LANG==='zh' ? `ElephantONE 購置成本更低且每年也更省：<span class="ins-hl">一開始就更划算</span>` : `ElephantONE has lower purchase cost <em>and</em> lower annual cost: <span class="ins-hl">cheaper from day one</span>` });
     } else if (epAnnSav > 0 && epCapexDiff > 0) {
       const beYr = (epCapexDiff / epAnnSav).toFixed(1);
       if (parseFloat(beYr) <= lt) {
         chips.push({ icon:'📈', text: LANG==='zh' ? `相比標準熱泵，ElephantONE 在 <span class="ins-hl">${beYr} 年</span>後總成本更低` : `ElephantONE amortises vs Standard HP in <span class="ins-hl">${beYr} years</span> — cheaper from then on` });
       } else {
-        chips.push({ icon:'📈', cls:'negative', text: LANG==='zh' ? `在 ${lt} 年壽命內，ElephantONE 未能回收比標準熱泵多的投入（差距：<span class="ins-hl">${fmtC(epCapexDiff - epAnnSav * lt)}</span>）` : `Within ${lt} yrs, ElephantONE doesn't fully amortise vs Standard HP — gap: <span class="ins-hl">${fmtC(epCapexDiff - epAnnSav * lt)}</span>` });
+        chips.push({ icon:'📈', cls:'negative', text: LANG==='zh' ? `在 ${lt} 年壽命內，ElephantONE 未能回收比標準熱泵多的投入（差距：<span class="ins-hl">${fmtC(epCapexDiff - epAnnSav * lt)}</span>）` : `Within ${lt} years, ElephantONE doesn't fully amortise vs Standard HP — gap: <span class="ins-hl">${fmtC(epCapexDiff - epAnnSav * lt)}</span>` });
       }
     } else {
       // EP has higher annual cost than HP (rare) — still show comparison
       const totalEP = epCapexDiff + epAnnSav * lt; // negative annSav means EP costs more
-      chips.push({ icon:'📈', cls:'negative', text: LANG==='zh' ? `在這些設定下，標準熱泵比 ElephantONE 在 ${lt} 年內總費用少 <span class="ins-hl">${fmtC(Math.abs(totalEP))}</span>` : `With these settings, Standard HP costs <span class="ins-hl">${fmtC(Math.abs((res.hp.capex+res.hp.pv-res.hp.sub) - (res.ep.capex+res.ep.pv-res.ep.sub) + (annEP-annHP)*lt))}</span> less than ElephantONE over ${lt} yrs` });
+      chips.push({ icon:'📈', cls:'negative', text: LANG==='zh' ? `在這些設定下，標準熱泵比 ElephantONE 在 ${lt} 年內總費用少 <span class="ins-hl">${fmtC(Math.abs(totalEP))}</span>` : `With these settings, Standard HP costs <span class="ins-hl">${fmtC(Math.abs((res.hp.capex+res.hp.pv-res.hp.sub) - (res.ep.capex+res.ep.pv-res.ep.sub) + (annEP-annHP)*lt))}</span> less than ElephantONE over ${lt} years` });
     }
   }
 
   // 3. Lifetime savings
   const lifeSavEP = (annGas - annEP) * lt;
   if (lifeSavEP > 0) {
-    chips.push({ icon:'💰', text: LANG==='zh' ? `${lt} 年節省 <span class="ins-hl">${fmtC(lifeSavEP)}</span>（EP vs Gas）` : `Save <span class="ins-hl">${fmtC(lifeSavEP)}</span> over ${lt} years with ElephantONE` });
+    chips.push({ icon:'💰', text: LANG==='zh' ? `${lt} 年相較燃氣節省 <span class="ins-hl">${fmtC(lifeSavEP)}</span>（EP）` : `Save <span class="ins-hl">${fmtC(lifeSavEP)}</span> over ${lt} years with ElephantONE compared to Gas Boiler` });
   }
 
   // 4. CO₂ reduction
   const co2Red = ((res.gas.co2 - res.ep.co2) / res.gas.co2 * 100).toFixed(0);
   if (co2Red > 0) {
-    chips.push({ icon:'🌍', text: LANG==='zh' ? `CO₂ 減少 <span class="ins-hl">${co2Red}%</span>（EP vs Gas）` : `<span class="ins-hl">${co2Red}% less CO₂</span> with ElephantONE vs Gas` });
+    chips.push({ icon:'🌍', text: LANG==='zh' ? `CO₂ 減少 <span class="ins-hl">${co2Red}%</span>（EP 相較燃氣）` : `<span class="ins-hl">${co2Red}% less CO₂</span> with ElephantONE compared to Gas Boiler` });
   }
 
   // 5. Monthly equivalence
@@ -3537,8 +3537,8 @@ function renderSparklines(res) {
       if (label) label.textContent = LANG === 'zh' ? '基準線' : 'Baseline';
     } else {
       if (label) label.textContent = totalSav >= 0
-        ? (LANG === 'zh' ? `${lt}年相較燃氣節省 ${fmtC(totalSav)}` : `saves ${fmtC(totalSav)} in ${lt} yr compared to gas`)
-        : (LANG === 'zh' ? `${lt}年相較燃氣多花 ${fmtC(Math.abs(totalSav))}` : `${fmtC(Math.abs(totalSav))} more in ${lt} yr compared to gas`);
+        ? (LANG === 'zh' ? `${lt}年相較燃氣節省 ${fmtC(totalSav)}` : `saves ${fmtC(totalSav)} in ${lt} years compared to Gas Boiler`)
+        : (LANG === 'zh' ? `${lt}年相較燃氣多花 ${fmtC(Math.abs(totalSav))}` : `${fmtC(Math.abs(totalSav))} more in ${lt} years compared to Gas Boiler`);
     }
   });
 }
