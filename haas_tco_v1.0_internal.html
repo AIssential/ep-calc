@@ -306,20 +306,27 @@
     .admin-btn:hover{background:var(--accent);border-color:var(--accent);color:#0B1120}
     .admin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:1000;align-items:center;justify-content:center}
     .admin-modal.open{display:flex}
-    .admin-modal-content{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;max-width:800px;max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+    .admin-modal-content{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:24px;max-width:96vw;max-height:84vh;overflow:auto;box-shadow:0 10px 40px rgba(0,0,0,.3)}
     .admin-modal-header{font-size:.9rem;font-weight:800;color:var(--text);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
     .admin-modal-close{cursor:pointer;font-size:20px;color:var(--muted);border:none;background:none;padding:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
     .admin-modal-close:hover{color:var(--text)}
     .admin-password-form{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
     .admin-password-input{padding:8px 10px;border:1px solid var(--border);border-radius:4px;background:var(--surface2);color:var(--text);font-size:.72rem}
     .admin-password-error{color:var(--fail);font-size:.65rem;font-weight:700}
-    .admin-table{width:100%;border-collapse:collapse;font-size:.7rem}
-    .admin-table th{text-align:left;padding:8px;background:var(--surface2);color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);position:sticky;top:0}
-    .admin-table td{padding:8px;border-bottom:1px solid var(--border);color:var(--text)}
-    .admin-table input{width:100%;padding:4px 6px;border:1px solid var(--border);border-radius:3px;background:var(--surface2);color:var(--text);font-size:.68rem;font-family:monospace}
+    .admin-table-wrap{overflow:auto;max-width:100%;border:1px solid var(--border);border-radius:6px}
+    .admin-table{width:max-content;min-width:100%;border-collapse:collapse;font-size:.7rem;table-layout:auto}
+    .admin-table th{text-align:left;padding:8px;background:var(--surface2);color:var(--muted);font-weight:700;border-bottom:1px solid var(--border);position:sticky;top:0;white-space:nowrap}
+    .admin-table td{padding:8px;border-bottom:1px solid var(--border);color:var(--text);white-space:nowrap}
+    .admin-table input{padding:4px 6px;border:1px solid var(--border);border-radius:3px;background:var(--surface2);color:var(--text);font-size:.68rem;font-family:monospace}
     .admin-table input:focus{outline:none;border-color:var(--accent);background:var(--surface)}
     .admin-table input.admin-readonly{opacity:.75;background:var(--surface);cursor:not-allowed}
-    .admin-param-name{font-weight:600;color:var(--text);max-width:200px}
+    .admin-param-name{font-weight:600;color:var(--text);max-width:340px;white-space:normal;line-height:1.25}
+    .admin-num-control{display:flex;align-items:center;gap:4px;min-width:150px}
+    .admin-num-input{width:94px;text-align:right}
+    .admin-unit{font-size:.64rem;color:var(--muted);min-width:38px;text-align:left}
+    .admin-spin-btn{width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:4px;background:var(--surface2);color:var(--text);cursor:pointer;font-weight:800;line-height:1;padding:0}
+    .admin-spin-btn:hover{border-color:var(--accent);background:var(--accent-dim)}
+    .admin-step-tag{font-size:.58rem;color:var(--muted);min-width:36px;text-align:right}
     .admin-buttons{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
     .admin-btn-status{padding:6px 16px;background:#7DB7FF;color:#0B1120;border:1px solid #5E9DF0;border-radius:4px;cursor:pointer;font-weight:700;font-size:.72rem;margin-right:auto}
     .admin-btn-status:hover{filter:brightness(0.96)}
@@ -677,6 +684,7 @@ const STRINGS = {
     admin_min: 'Min',
     admin_max: 'Max',
     admin_default: 'Default',
+    admin_default_balanced: 'Default / Balanced',
     admin_pessimistic: 'Pessimistic',
     admin_balanced: 'Balanced',
     admin_optimistic: 'Optimistic',
@@ -685,15 +693,19 @@ const STRINGS = {
     admin_status_quo_confirm: 'Restore all admin settings to Status quo?',
     admin_status_quo_success: 'Status quo restored.',
     admin_load_remote: 'Load Remote',
+    admin_import_json: 'Import JSON',
     admin_export_json: 'Export JSON',
     admin_remote_loaded: 'Remote configuration loaded.',
     admin_remote_missing: 'No remote configuration found at admin-config.json.',
     admin_remote_error: 'Failed to load remote configuration.',
     admin_export_success: 'Configuration JSON downloaded.',
+    admin_import_success: 'Configuration JSON imported.',
+    admin_import_invalid: 'Invalid JSON configuration file.',
     admin_publish_hint: 'Tip: publish admin-config.json to apply globally for all users.',
     admin_save: 'Save Configuration',
     admin_cancel: 'Cancel',
     admin_validation_error: 'Validation Error',
+    admin_validation_number: 'Invalid number for',
     admin_validation_negative: 'Negative values not allowed for',
     admin_validation_max_min: 'Max must be greater than or equal to min for',
     admin_validation_zero: 'Zero value not allowed for',
@@ -824,6 +836,7 @@ const STRINGS = {
     admin_min: '最小值',
     admin_max: '最大值',
     admin_default: '預設值',
+    admin_default_balanced: '預設值 / 均衡',
     admin_pessimistic: '悲觀',
     admin_balanced: '均衡',
     admin_optimistic: '樂觀',
@@ -832,15 +845,19 @@ const STRINGS = {
     admin_status_quo_confirm: '將所有管理設定還原為現狀？',
     admin_status_quo_success: '已還原為現狀。',
     admin_load_remote: '載入遠端',
+    admin_import_json: '匯入 JSON',
     admin_export_json: '匯出 JSON',
     admin_remote_loaded: '已載入遠端配置。',
     admin_remote_missing: '在 admin-config.json 找不到遠端配置。',
     admin_remote_error: '載入遠端配置失敗。',
     admin_export_success: '配置 JSON 已下載。',
+    admin_import_success: '配置 JSON 已匯入。',
+    admin_import_invalid: 'JSON 配置檔無效。',
     admin_publish_hint: '提示：發布 admin-config.json 後可全域套用給所有使用者。',
     admin_save: '保存配置',
     admin_cancel: '取消',
     admin_validation_error: '驗證錯誤',
+    admin_validation_number: '數值格式錯誤：',
     admin_validation_negative: '不允許負值',
     admin_validation_max_min: '最大值必須大於或等於最小值',
     admin_validation_zero: '不允許零值',
@@ -2563,13 +2580,12 @@ function renderAdminTable() {
   let html = '';
   
   // Build table with all parameters
-  html += `<table class="admin-table"><thead><tr>
+  html += `<div class="admin-table-wrap"><table class="admin-table"><thead><tr>
     <th>${T('admin_parameter')}</th>
     <th>${T('admin_min')}</th>
     <th>${T('admin_max')}</th>
-    <th>${T('admin_default')}</th>
+    <th>${T('admin_default_balanced')}</th>
     <th>${T('admin_pessimistic')}</th>
-    <th>${T('admin_balanced')}</th>
     <th>${T('admin_optimistic')}</th>
   </tr></thead><tbody>`;
   
@@ -2579,22 +2595,20 @@ function renderAdminTable() {
       const paramKey = p.key;
       const paramLabel = pLabel(p);
       const scPessimistic = SCENARIO_PRESETS[0].params[paramKey] !== undefined ? SCENARIO_PRESETS[0].params[paramKey] : DEFAULTS[paramKey];
-      const scBalanced = DEFAULTS[paramKey];
       const scOptimistic = SCENARIO_PRESETS[2].params[paramKey] !== undefined ? SCENARIO_PRESETS[2].params[paramKey] : DEFAULTS[paramKey];
       
       html += `<tr>
         <td class="admin-param-name">${paramLabel}</td>
-        <td><input type="number" id="admin-min-${paramKey}" value="${p.min}" step="${p.step}"></td>
-        <td><input type="number" id="admin-max-${paramKey}" value="${p.max}" step="${p.step}"></td>
-        <td><input type="number" id="admin-def-${paramKey}" value="${DEFAULTS[paramKey]}" step="${p.step}"></td>
-        <td><input type="number" id="admin-pess-${paramKey}" value="${scPessimistic}" step="${p.step}"></td>
-        <td><input type="number" id="admin-bal-${paramKey}" value="${scBalanced}" step="${p.step}" readonly aria-readonly="true" class="admin-readonly" title="${T('admin_balanced_locked')}"></td>
-        <td><input type="number" id="admin-opt-${paramKey}" value="${scOptimistic}" step="${p.step}"></td>
+        <td>${renderAdminNumericControl(`admin-min-${paramKey}`, p.min, p.step, p.unit)}</td>
+        <td>${renderAdminNumericControl(`admin-max-${paramKey}`, p.max, p.step, p.unit)}</td>
+        <td>${renderAdminNumericControl(`admin-def-${paramKey}`, DEFAULTS[paramKey], p.step, p.unit)}</td>
+        <td>${renderAdminNumericControl(`admin-pess-${paramKey}`, scPessimistic, p.step, p.unit)}</td>
+        <td>${renderAdminNumericControl(`admin-opt-${paramKey}`, scOptimistic, p.step, p.unit)}</td>
       </tr>`;
     });
   });
   
-  html += `</tbody></table>
+  html += `</tbody></table></div>
     <div style="margin-top:16px;padding:12px;background:var(--surface2);border-radius:4px;border-left:3px solid var(--accent)">
       <div style="margin-bottom:8px"><label style="display:block;margin-bottom:4px;font-size:.8rem;font-weight:700;color:var(--muted)">${T('admin_api_endpoint')}</label><input type="text" id="admin-api-endpoint" value="${ADMIN_API_ENDPOINT}" placeholder="https://api.example.com/admin-config" style="width:100%;padding:6px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
       <div style="margin-bottom:8px"><label style="display:block;margin-bottom:4px;font-size:.8rem;font-weight:700;color:var(--muted)">${T('admin_api_token')}</label><input type="password" id="admin-api-token" value="${ADMIN_API_TOKEN}" placeholder="Bearer token (optional)" style="width:100%;padding:6px;border:1px solid var(--border);border-radius:3px;background:var(--surface);color:var(--text);font-size:.8rem"></div>
@@ -2605,6 +2619,7 @@ function renderAdminTable() {
     <div class="admin-buttons">
       <button class="admin-btn-status" onclick="restoreStatusQuoConfig()">${T('admin_status_quo')}</button>
       <button class="admin-btn-remote" onclick="loadRemoteConfigFromAdmin()">${T('admin_load_remote')}</button>
+      <button class="admin-btn-remote" onclick="importAdminConfigJson()">${T('admin_import_json')}</button>
       <button class="admin-btn-remote" onclick="exportAdminConfigJson()">${T('admin_export_json')}</button>
       <button class="admin-btn-cancel" onclick="closeAdminModal()">${T('admin_cancel')}</button>
       <button class="admin-btn-save" onclick="saveAdminConfig()">${T('admin_save')}</button>
@@ -2612,6 +2627,59 @@ function renderAdminTable() {
   html += `<div style="margin-top:8px;color:var(--muted);font-size:.64rem">${T('admin_publish_hint')} — GitHub ${T('admin_github_commit_attempt').toLowerCase()}</div>`;
   
   body.innerHTML = html;
+}
+
+function adminNumDecimals(step) {
+  const s = String(step ?? 1);
+  if (!s.includes('.')) return 0;
+  return s.split('.')[1].length;
+}
+
+function formatAdminNumber(value, step) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return '';
+  return n.toFixed(adminNumDecimals(step));
+}
+
+function renderAdminNumericControl(inputId, value, step, unit) {
+  const stepLabel = Number(step) >= 1 ? `±${step}` : `±${formatAdminNumber(step, step)}`;
+  const unitLabel = unit || '';
+  return `<div class="admin-num-control">
+    <button class="admin-spin-btn" type="button" onclick="adminAdjustValue('${inputId}', -1, ${step})">−</button>
+    <input type="text" class="admin-num-input" id="${inputId}" value="${formatAdminNumber(value, step)}" onblur="normalizeAdminInput('${inputId}', ${step})" onkeydown="if(event.key==='Enter'){normalizeAdminInput('${inputId}', ${step});event.preventDefault();}">
+    <button class="admin-spin-btn" type="button" onclick="adminAdjustValue('${inputId}', 1, ${step})">+</button>
+    <span class="admin-unit">${unitLabel}</span>
+    <span class="admin-step-tag">${stepLabel}</span>
+  </div>`;
+}
+
+function parseAdminInputValue(raw) {
+  if (raw == null) return NaN;
+  const normalized = String(raw).trim().replace(',', '.').replace(/[^0-9+\-.]/g, '');
+  return Number.parseFloat(normalized);
+}
+
+function normalizeAdminInput(inputId, step) {
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  const parsed = parseAdminInputValue(el.value);
+  if (!Number.isFinite(parsed)) return;
+  el.value = formatAdminNumber(parsed, step);
+}
+
+function adminAdjustValue(inputId, direction, step) {
+  const el = document.getElementById(inputId);
+  if (!el) return;
+  const current = parseAdminInputValue(el.value);
+  const base = Number.isFinite(current) ? current : 0;
+  const next = base + direction * Number(step || 1);
+  el.value = formatAdminNumber(next, step || 1);
+}
+
+function getAdminInputNumber(inputId) {
+  const el = document.getElementById(inputId);
+  if (!el) return NaN;
+  return parseAdminInputValue(el.value);
 }
 
 function refreshUiAfterConfigChange() {
@@ -2634,12 +2702,18 @@ async function saveAdminConfig() {
     if (sec.buildingConfig) return;
     sec.params.forEach(p => {
       const paramKey = p.key;
-      const minVal = parseFloat(document.getElementById(`admin-min-${paramKey}`).value);
-      const maxVal = parseFloat(document.getElementById(`admin-max-${paramKey}`).value);
-      const defVal = parseFloat(document.getElementById(`admin-def-${paramKey}`).value);
-      const pessVal = parseFloat(document.getElementById(`admin-pess-${paramKey}`).value);
+      const minVal = getAdminInputNumber(`admin-min-${paramKey}`);
+      const maxVal = getAdminInputNumber(`admin-max-${paramKey}`);
+      const defVal = getAdminInputNumber(`admin-def-${paramKey}`);
+      const pessVal = getAdminInputNumber(`admin-pess-${paramKey}`);
       const balVal = defVal;
-      const optVal = parseFloat(document.getElementById(`admin-opt-${paramKey}`).value);
+      const optVal = getAdminInputNumber(`admin-opt-${paramKey}`);
+
+      if (!Number.isFinite(minVal)) errors.push(`${T('admin_validation_number')} ${pLabel(p)} (min)`);
+      if (!Number.isFinite(maxVal)) errors.push(`${T('admin_validation_number')} ${pLabel(p)} (max)`);
+      if (!Number.isFinite(defVal)) errors.push(`${T('admin_validation_number')} ${pLabel(p)} (default)`);
+      if (!Number.isFinite(pessVal)) errors.push(`${T('admin_validation_number')} ${pLabel(p)} (pessimistic)`);
+      if (!Number.isFinite(optVal)) errors.push(`${T('admin_validation_number')} ${pLabel(p)} (optimistic)`);
       
       // Check for negative values where not allowed
       if (paramKey !== 'carbon_price' && paramKey !== 'vs_balancing') {
@@ -2773,6 +2847,32 @@ function exportAdminConfigJson() {
   } catch (_) {
     alert(T('admin_remote_error'));
   }
+}
+
+function importAdminConfigJson() {
+  const picker = document.createElement('input');
+  picker.type = 'file';
+  picker.accept = 'application/json,.json';
+  picker.onchange = async () => {
+    const file = picker.files && picker.files[0];
+    if (!file) return;
+    try {
+      const raw = await file.text();
+      const parsed = JSON.parse(raw);
+      const applied = applyAdminConfigSnapshot(parsed, { resetState: true });
+      if (!applied) {
+        alert(T('admin_import_invalid'));
+        return;
+      }
+      persistAdminConfig();
+      renderAdminTable();
+      refreshUiAfterConfigChange();
+      alert(T('admin_import_success'));
+    } catch (_) {
+      alert(T('admin_import_invalid'));
+    }
+  };
+  picker.click();
 }
 
 // ── Sidebar toggle ─────────────────────────────────────────────────────────
