@@ -2204,6 +2204,7 @@ function renderHeroCards(res) {
   const fmtLcoh = v => (v * 100).toFixed(2);
   const fmtMo   = v => Math.round(v);
   const fmtE    = v => Math.round(v).toLocaleString('de-DE');
+  const fmtSub  = v => '-' + fmtC(Math.abs(v));
   const dr      = (lbl, val) => `<div class="tc-detail-row"><span class="td-lbl">${lbl}</span><span class="td-val">${val}</span></div>`;
   const drT     = (lbl, val, cls) => `<div class="tc-detail-row td-total"><span class="td-lbl">${lbl}</span><span class="td-val" style="color:var(--${cls})">${val}</span></div>`;
 
@@ -2237,21 +2238,21 @@ function renderHeroCards(res) {
       const capex = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex + tech.r.pv);
       paramsHTML = `
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${capex}</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_ep*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_ep.toFixed(1)}</span></div>`;
     } else if (tech.cls === 'hp') {
       paramsHTML = `
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_hp*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_hp.toFixed(1)}</span></div>`;
     } else {
       paramsHTML = `
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval">${fmtC(tech.r.sub)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'燃料價格':'Fuel Price'}</span><span class="tc-pval">${(S.gas_price_avg*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'效率':'Efficiency'}</span><span class="tc-pval">${(S.boiler_efficiency*100).toFixed(0)} %</span></div>`;
