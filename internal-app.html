@@ -129,12 +129,10 @@
     .tc-header .tc-subtitle{font-size:.65rem;color:var(--muted);line-height:1.3}
     .tc-media{position:relative;width:100%;aspect-ratio:3/2;margin-bottom:12px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#101a2c;box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 10px 24px rgba(0,0,0,.25)}
     .tc-media::after{content:'';position:absolute;inset:auto 0 0 0;height:36%;background:linear-gradient(180deg, rgba(11,17,32,0) 0%, rgba(11,17,32,.18) 30%, rgba(11,17,32,.72) 100%)}
-    .tc-media-art{position:absolute;inset:8px 8px 14px;display:flex;align-items:flex-end;justify-content:center}
+    .tc-media-art{position:absolute;inset:0;display:flex;align-items:stretch;justify-content:center}
     .tc-media svg{max-width:100%;max-height:100%;display:block}
-    .tc-media-photo{display:block;width:100%;height:100%;object-fit:contain;object-position:center 100%}
-    .tc-media.ep .tc-media-photo{transform:scale(1.06);transform-origin:center 62%}
-    .tc-media.hp .tc-media-photo{transform:scale(1.05);transform-origin:center 62%}
-    .tc-media.gas .tc-media-photo{transform:scale(1.05);transform-origin:center 62%}
+    .tc-media-photo{display:block;width:100%;height:100%;object-fit:cover;object-position:center center}
+    .tc-media.ep .tc-media-photo,.tc-media.hp .tc-media-photo,.tc-media.gas .tc-media-photo{transform:scale(1.08);transform-origin:center center}
     .tc-media-placeholder .tc-media-art{padding:4px}
     .tc-media-placeholder-shape{position:relative;width:100%;height:100%;border-radius:8px;border:1px dashed rgba(255,255,255,.12);background:
       linear-gradient(180deg, rgba(255,255,255,.03) 0%, rgba(255,255,255,.01) 100%),
@@ -2237,21 +2235,21 @@ function renderHeroCards(res) {
     if (tech.cls === 'ep') {
       const capex = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex + tech.r.pv);
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${capex}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval">${capex}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_ep*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_ep.toFixed(1)}</span></div>`;
     } else if (tech.cls === 'hp') {
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_hp*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_hp.toFixed(1)}</span></div>`;
     } else {
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval accent">${fmtC(tech.r.capex)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval">${fmtC(tech.r.capex)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'燃料價格':'Fuel Price'}</span><span class="tc-pval">${(S.gas_price_avg*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/year</span></div>
@@ -3460,9 +3458,15 @@ async function exportPDF() {
     }
 
     await loadScriptOnce(
+      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+      () => typeof window.html2canvas === 'function'
+    );
+    await loadScriptOnce(
       'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
       () => Boolean(window.jspdf && window.jspdf.jsPDF)
     );
+
+    await wait(160);
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4', compress: true });
@@ -3470,7 +3474,7 @@ async function exportPDF() {
     const pageH = pdf.internal.pageSize.getHeight();
     const margin = 10;
 
-    // Summary page: crisp text + chart canvases (avoids broken full-page screenshots).
+    // Summary page: clean KPI layout + high-resolution card captures for readability.
     const res = calculate(S);
     const lt = S.lifetime;
     const summary = [
@@ -3479,53 +3483,62 @@ async function exportPDF() {
       { n: T('bar_gas'), c: '#EF6B4A', lcoh: res.gas.t, monthly: res.gas.t * S.total_heat / 12, life: res.gas.t * S.total_heat * lt },
     ];
 
+    pdf.setFillColor(248, 250, 252);
+    pdf.rect(0, 0, pageW, pageH, 'F');
     pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(16);
+    pdf.setFontSize(17);
     pdf.text('EP Heat Cost Calculator - Export', margin, margin);
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(10);
     pdf.text(`${LANG === 'zh' ? '情境' : 'Scenario'}: ${getActiveScenarioLabel()}   |   ${LANG === 'zh' ? '匯出時間' : 'Exported'}: ${new Date().toLocaleString()}`, margin, margin + 6);
 
-    let y = margin + 14;
-    const rowH = 8;
-    pdf.setFillColor(230, 235, 242);
-    pdf.rect(margin, y, pageW - margin * 2, rowH, 'F');
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Technology', margin + 2, y + 5.3);
-    pdf.text('LCOH (ct/kWh)', margin + 60, y + 5.3);
-    pdf.text('Monthly Cost', margin + 105, y + 5.3);
-    pdf.text(`Lifetime (${lt} years)`, margin + 150, y + 5.3);
-    y += rowH;
-
-    pdf.setFont('helvetica', 'normal');
-    summary.forEach(s => {
-      pdf.setDrawColor(225, 230, 236);
-      pdf.rect(margin, y, pageW - margin * 2, rowH);
+    let y = margin + 12;
+    const gap = 4;
+    const cardW = (pageW - margin * 2 - gap * 2) / 3;
+    const cardH = 24;
+    summary.forEach((s, i) => {
+      const x = margin + i * (cardW + gap);
+      pdf.setFillColor(255, 255, 255);
+      pdf.setDrawColor(220, 226, 235);
+      pdf.roundedRect(x, y, cardW, cardH, 2.4, 2.4, 'FD');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(11);
       pdf.setTextColor(s.c);
-      pdf.text(s.n, margin + 2, y + 5.3);
-      pdf.setTextColor('#111111');
-      pdf.text((s.lcoh * 100).toFixed(2), margin + 60, y + 5.3);
-      pdf.text(fmtC(s.monthly) + '/month', margin + 105, y + 5.3);
-      pdf.text(fmtC(s.life), margin + 150, y + 5.3);
-      y += rowH;
+      pdf.text(s.n, x + 3, y + 6);
+      pdf.setTextColor(20, 23, 28);
+      pdf.setFontSize(13);
+      pdf.text(`${(s.lcoh * 100).toFixed(2)} ct/kWh`, x + 3, y + 13.5);
+      pdf.setFontSize(9.5);
+      pdf.text(`${fmtC(s.monthly)}/month`, x + 3, y + 19);
+      pdf.text(fmtC(s.life), x + cardW - 3, y + 19, { align: 'right' });
     });
 
-    const chartTop = y + 6;
+    y += cardH + 6;
+    const chartTop = y;
     const chartW = (pageW - margin * 3) / 2;
-    const chartH = Math.max(65, pageH - chartTop - margin);
+    const chartH = pageH - chartTop - margin;
 
-    const addChart = (id, x, title) => {
-      const canvas = document.getElementById(id);
-      if (!canvas || typeof canvas.toDataURL !== 'function') return;
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(10);
-      pdf.text(title, x, chartTop - 2);
-      const img = canvas.toDataURL('image/png');
-      pdf.addImage(img, 'PNG', x, chartTop, chartW, chartH, undefined, 'FAST');
+    const captureCardImage = async (canvasId) => {
+      const canvasEl = document.getElementById(canvasId);
+      const card = canvasEl ? canvasEl.closest('.card') : null;
+      if (!card || typeof window.html2canvas !== 'function') return null;
+      const shot = await window.html2canvas(card, {
+        backgroundColor: '#FFFFFF',
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        scrollX: 0,
+        scrollY: -window.scrollY,
+        windowWidth: card.scrollWidth,
+        windowHeight: card.scrollHeight
+      });
+      return shot.toDataURL('image/png');
     };
 
-    addChart('lcohChart', margin, T('lcoh_title'));
-    addChart('cumChart', margin * 2 + chartW, T('cum_title'));
+    const lcohImg = await captureCardImage('lcohChart');
+    const cumImg = await captureCardImage('cumChart');
+    if (lcohImg) pdf.addImage(lcohImg, 'PNG', margin, chartTop, chartW, chartH, undefined, 'FAST');
+    if (cumImg) pdf.addImage(cumImg, 'PNG', margin * 2 + chartW, chartTop, chartW, chartH, undefined, 'FAST');
 
     // Attach current active settings for the selected scenario only.
     addActiveSettingsTableToPdf(pdf);
