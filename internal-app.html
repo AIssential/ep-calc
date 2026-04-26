@@ -370,9 +370,6 @@
     html.light-theme ::-webkit-scrollbar-thumb{background:var(--border)}
 
     /* === D: Export button === */
-    .export-btn{display:flex;align-items:center;gap:4px;cursor:pointer;padding:4px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);font-size:.68rem;font-weight:700;transition:background .15s}
-    .export-btn:hover{background:var(--accent);color:#0B1120;border-color:var(--accent)}
-    .export-btn .exp-icon{font-size:.8rem}
 
     /* ── Responsive breakpoints ─────────────────────────────────────────── */
 
@@ -436,9 +433,6 @@
     </div>
     <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
       <span class="theme-icon" id="theme-icon">☀️</span>
-    </button>
-    <button class="export-btn" onclick="exportPDF()">
-      <span class="exp-icon">📄</span> Export
     </button>
     <div id="hdr-badge">…</div>
   </div>
@@ -2175,9 +2169,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // ── Tech cards ─────────────────────────────────────────────────────────────
 const TC_NAMES = { ep:'tc_ep', hp:'tc_hp', gas:'tc_gas' };
 const TC_SUBS  = {
-  en:{ ep:'Low operating costs\nthanks to high efficiency.', hp:'All-round supply at\nstable prices.', gas:'Low purchase cost,\nhigher running costs.' },
+  en:{ ep:'Lowest total cost\nwhen self-consumption and dynamic tariff are active.', hp:'Balanced option with\nmoderate upfront cost and stable operation.', gas:'Lowest entry cost,\nhighest long-term exposure to fuel and carbon.' },
   de:{ ep:'Niedrige Betriebskosten\ndank hoher Effizienz.', hp:'Rundum-Versorgung bei\nstabilen Preisen.', gas:'Günstige Anschaffung,\nhöhere laufende Kosten.' },
-  zh:{ ep:'高效率帶來\n低營運成本。', hp:'穩定價格的\n全方位供應。', gas:'購買成本低，\n運行成本較高。' }
+  zh:{ ep:'在高自用與動態電價下\n終身總成本最低。', hp:'前期投入中等，\n運行成本穩定。', gas:'初期投入最低，\n長期受燃料與碳價影響最高。' }
 };
 
 // ── Flip card interaction ───────────────────────────────────────────────────
@@ -2203,6 +2197,7 @@ function renderHeroCards(res) {
   const fmtMo   = v => Math.round(v);
   const fmtE    = v => Math.round(v).toLocaleString('de-DE');
   const fmtSub  = v => '-' + fmtC(Math.abs(v));
+  const fmtSignedC = v => `${v >= 0 ? '+' : '-'}${fmtC(Math.abs(v))}`;
   const dr      = (lbl, val) => `<div class="tc-detail-row"><span class="td-lbl">${lbl}</span><span class="td-val">${val}</span></div>`;
   const drT     = (lbl, val, cls) => `<div class="tc-detail-row td-total"><span class="td-lbl">${lbl}</span><span class="td-val" style="color:var(--${cls})">${val}</span></div>`;
 
@@ -2215,41 +2210,48 @@ function renderHeroCards(res) {
     const totalLifetime = lcoh * S.total_heat * lt;
     const isWinner = tech.cls === winnerCls;
     const sub = (TC_SUBS[LANG] || TC_SUBS.en)[tech.cls];
+    const benchmarkGapPct = sorted[0].r.t > 0 ? ((lcoh / sorted[0].r.t - 1) * 100) : 0;
+    const savingsVsGasLifetime = (res.gas.t - lcoh) * S.total_heat * lt;
+    const decisionHeadline = isWinner
+      ? (LANG === 'zh' ? `${lt} 年期基準勝出` : `Benchmark winner over ${lt} years`)
+      : (LANG === 'zh' ? `比基準高 ${benchmarkGapPct.toFixed(0)}%（${lt} 年）` : `${benchmarkGapPct.toFixed(0)}% above benchmark over ${lt} years`);
 
     // Winner / comparison badge
     let badgeHTML = '';
     if (isWinner) {
       el.classList.add('winner');
-      badgeHTML = `<span class="tc-badge winner-badge">🏆 ${LANG === 'zh' ? '最低價' : 'Best Price'}</span>`;
+      badgeHTML = `<span class="tc-badge winner-badge">🏆 ${LANG === 'zh' ? '基準勝出' : 'Benchmark Winner'}</span>`;
     } else {
       el.classList.remove('winner');
       const diffMo = monthly - winnerMonthly;
       const diffLabel = LANG === 'zh'
-        ? `${fmtMo(Math.abs(diffMo))} €/月 ${diffMo > 0 ? '多於' : '少於'} ${winnerName}`
-        : `${fmtMo(Math.abs(diffMo))} €/month ${diffMo > 0 ? 'more than' : 'less than'} ${winnerName}`;
-      badgeHTML = `<span class="tc-badge compare-badge">${diffMo > 0 ? '↑' : '↓'} ${diffLabel}</span>`;
+        ? `${diffMo >= 0 ? '+' : '-'}${fmtMo(Math.abs(diffMo))} €/月 相對基準`
+        : `${diffMo >= 0 ? '+' : '-'}${fmtMo(Math.abs(diffMo))} €/month vs benchmark`;
+      badgeHTML = `<span class="tc-badge compare-badge">${diffLabel}</span>`;
     }
 
     // Key params differ by tech (front side)
     let paramsHTML = '';
     if (tech.cls === 'ep') {
-      const capex = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex + tech.r.pv);
+      const upfrontNet = FIN_MODE === 'haas' ? T('tc_haas_note') : fmtC(tech.r.capex + tech.r.pv - tech.r.sub);
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval">${capex}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'前期投入（扣除補貼）':'Upfront Investment (after subsidy)'}</span><span class="tc-pval">${upfrontNet}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_ep*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_ep)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_ep.toFixed(1)}</span></div>`;
     } else if (tech.cls === 'hp') {
+      const upfrontNet = fmtC(tech.r.capex + tech.r.pv - tech.r.sub);
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval">${fmtC(tech.r.capex + tech.r.pv)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'前期投入（扣除補貼）':'Upfront Investment (after subsidy)'}</span><span class="tc-pval">${upfrontNet}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'能源價格':'Energy Price'}</span><span class="tc-pval">${(S.electricity_price_hp*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">⚡</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.elec_hp)} kWh/year</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">📋</span>${LANG==='zh'?'條件':'Conditions'}</span><span class="tc-pval">SCOP ${S.scop_hp.toFixed(1)}</span></div>`;
     } else {
+      const upfrontNet = fmtC(tech.r.capex - tech.r.sub);
       paramsHTML = `
-        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'購置成本':'Purchase Cost'}</span><span class="tc-pval">${fmtC(tech.r.capex)}</span></div>
+        <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🏠</span>${LANG==='zh'?'前期投入（扣除補貼）':'Upfront Investment (after subsidy)'}</span><span class="tc-pval">${upfrontNet}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🎁</span>${LANG==='zh'?'補貼':'Subsidy'}</span><span class="tc-pval accent">${fmtSub(tech.r.sub)}</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'燃料價格':'Fuel Price'}</span><span class="tc-pval">${(S.gas_price_avg*100).toFixed(1)} ct/kWh</span></div>
         <div class="tc-param-row"><span class="tc-plbl"><span class="tc-icon">🔥</span>${LANG==='zh'?'年度能源需求':'Annual Energy Demand'}</span><span class="tc-pval">${fmtE(res.gas_cons)} kWh/year</span></div>
@@ -2268,12 +2270,14 @@ function renderHeroCards(res) {
       
       <div class="tc-hero">
         <div style="width:100%">
-          <div class="tc-headline">${LANG==='zh'?'總成本':'Total Cost'} (${lt} ${LANG==='zh'?'年':'years'})</div>
+          <div class="tc-headline">${decisionHeadline}</div>
+          <div class="tc-headline" style="font-size:.66rem">${LANG==='zh'?'總成本':'Total Cost'} (${lt} ${LANG==='zh'?'年':'years'})</div>
           <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
             <span class="tc-cost-big" id="anim-lcoh-${tech.cls}">${fmtLcoh(lcoh)}</span>
             <span class="tc-cost-unit">ct/kWh</span>
           </div>
           <div class="tc-monthly" id="anim-mo-${tech.cls}">${fmtMo(monthly)} €/${LANG==='zh'?'月':'month'}</div>
+          <div class="tc-monthly">${LANG==='zh'?'相較燃氣終身節省':'Lifetime savings vs Gas Boiler'}: ${fmtSignedC(savingsVsGasLifetime)}</div>
         </div>
         <div style="margin-top:6px">${badgeHTML}</div>
       </div>
@@ -2299,14 +2303,18 @@ function renderHeroCards(res) {
     const carbonAnn = tech.r.carbon * S.total_heat;
     const revenueAnn = (tech.r.revenue || 0) * S.total_heat;
     const totalAnn = tech.r.t * S.total_heat;
+    const capexNet = (tech.cls === 'ep' && FIN_MODE === 'haas') ? 0 : (tech.r.capex + (tech.r.pv || 0) - (tech.r.sub || 0));
 
     // CAPEX details by tech
     let capexRows = '';
     if (tech.cls === 'ep') {
       if (FIN_MODE === 'haas') {
-        capexRows = dr('HaaS Monthly Fee', fmtC(S.haas_monthly_fee) + '/mo');
+        capexRows =
+          dr(LANG==='zh'?'CAPEX 淨額':'Net CAPEX', '0 € (HaaS lease)') +
+          dr('HaaS Monthly Fee', fmtC(S.haas_monthly_fee) + '/mo');
       } else {
         capexRows =
+          dr(LANG==='zh'?'CAPEX 淨額':'Net CAPEX', fmtC(capexNet)) +
           dr('EP Unit', fmtC(S.ep_box)) +
           dr('Radiator Piping', fmtC(S.ep_radiator_piping)) +
           dr('Heating Calculation', fmtC(S.ep_heating_calc)) +
@@ -2319,6 +2327,7 @@ function renderHeroCards(res) {
       }
     } else if (tech.cls === 'hp') {
       capexRows =
+        dr(LANG==='zh'?'CAPEX 淨額':'Net CAPEX', fmtC(capexNet)) +
         dr('HP Unit', fmtC(S.hp_unit)) +
         dr('Radiator Piping', fmtC(S.hp_radiator_piping)) +
         dr('Heating Calculation', fmtC(S.hp_heating_calc)) +
@@ -2330,6 +2339,7 @@ function renderHeroCards(res) {
         (tech.r.sub > 0 ? `<div class="tc-detail-row"><span class="td-lbl td-sub">− Subsidy (${(S.subsidy_rate*100).toFixed(0)}%)</span><span class="td-val td-sub">−${fmtC(tech.r.sub)}</span></div>` : '');
     } else {
       capexRows =
+        dr(LANG==='zh'?'CAPEX 淨額':'Net CAPEX', fmtC(capexNet)) +
         dr('Boiler Unit', fmtC(S.gas_boiler_unit)) +
         dr('Decommissioning', fmtC(S.gas_decommissioning)) +
         dr('Heating Calculation', fmtC(S.gas_heating_calc)) +
@@ -2397,6 +2407,12 @@ function renderHeroCards(res) {
         <span class="tc-back-close">${LANG==='zh'?'← 返回':'← Back'}</span>
       </div>
       <div class="tc-back-section">
+        <div class="tc-back-section-title">📌 ${LANG==='zh'?'基準摘要':'Benchmark Summary'}</div>
+        ${drT(LANG==='zh'?'年度總計':'Annual Total', fmtC(totalAnn) + '/year', tech.cls)}
+        ${drT(LANG==='zh'?'終身總計':'Lifetime Total (' + lt + ' years)', fmtC(totalAnn * lt), tech.cls)}
+        ${dr(LANG==='zh'?'相較燃氣終身節省':'Lifetime savings vs Gas Boiler', fmtSignedC(savingsVsGasLifetime))}
+      </div>
+      <div class="tc-back-section">
         <div class="tc-back-section-title">🏗 ${LANG==='zh'?'資本支出':'CAPEX'} (${fmtC(capexAnn)}/year)</div>
         ${capexRows}
       </div>
@@ -2413,11 +2429,7 @@ function renderHeroCards(res) {
         ${dr('CO₂ Emissions', fmtE(tech.r.co2) + ' kg/year')}
         ${dr('Carbon Price', S.carbon_price + ' €/tCO₂')}
       </div>` : ''}
-      ${vsSection}
-      <div style="padding:0 16px 14px">
-        ${drT(LANG==='zh'?'年度總計':'Annual Total', fmtC(totalAnn) + '/year', tech.cls)}
-        ${drT(LANG==='zh'?'終身總計':'Lifetime Total (' + lt + ' years)', fmtC(totalAnn * lt), tech.cls)}
-      </div>`;
+      ${vsSection}`;
   });
   renderSparklines(res);
 }
@@ -3295,274 +3307,6 @@ const _revealObs = new IntersectionObserver((entries) => {
 
 function initReveal() {
   document.querySelectorAll('.reveal').forEach(el => _revealObs.observe(el));
-}
-
-// ── D: Export / Downloadable PDF ───────────────────────────────────────────
-function loadScriptOnce(src, check) {
-  if (check()) return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const existing = Array.from(document.querySelectorAll('script')).find(s => s.src === src);
-    if (existing) {
-      existing.addEventListener('load', () => resolve(), { once: true });
-      existing.addEventListener('error', () => reject(new Error(`Failed loading ${src}`)), { once: true });
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = src;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => reject(new Error(`Failed loading ${src}`));
-    document.head.appendChild(script);
-  });
-}
-
-function wait(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function getActiveScenarioLabel() {
-  if (activeScenario >= 0 && SCENARIO_PRESETS[activeScenario]) {
-    const sc = SCENARIO_PRESETS[activeScenario];
-    return sc[LANG] || sc.en || String(activeScenario);
-  }
-  return LANG === 'zh' ? '自訂' : 'Custom';
-}
-
-function buildActiveSettingsRowsForPdf() {
-  const rows = [];
-  const addSection = (title) => rows.push({ type: 'section', label: title });
-  const addRow = (label, value) => rows.push({ type: 'row', label, value: String(value) });
-
-  addSection(LANG === 'zh' ? '目前狀態' : 'Current State');
-  addRow(LANG === 'zh' ? '情境' : 'Scenario', getActiveScenarioLabel());
-  addRow(LANG === 'zh' ? '模式' : 'Mode', T(LIGHT_MODE ? 'mode_light' : 'mode_full'));
-  addRow(LANG === 'zh' ? '融資模式' : 'Financing', T(FIN_MODE === 'haas' ? 'fin_haas' : 'fin_buy'));
-  addRow(LANG === 'zh' ? '電動車充電' : 'EV Charging', HAS_EV ? (LANG === 'zh' ? '啟用' : 'Enabled') : (LANG === 'zh' ? '停用' : 'Disabled'));
-  addRow(LANG === 'zh' ? 'VPP 啟用' : 'VPP Enabled', VPP_ENABLED ? (LANG === 'zh' ? '啟用' : 'Enabled') : (LANG === 'zh' ? '停用' : 'Disabled'));
-  addRow(LANG === 'zh' ? '建築類型' : 'Building Class', T('bc_' + BC.cls));
-  addRow(LANG === 'zh' ? '居住面積' : 'Living Area', `${BC.area} m2`);
-  addRow(LANG === 'zh' ? '人數' : 'Persons', BC.persons);
-
-  SECTIONS.forEach(sec => {
-    addSection(T(sec.labelKey));
-    sec.params.forEach(p => {
-      addRow(pLabel(p), displayVal(p));
-    });
-  });
-
-  return rows;
-}
-
-function addActiveSettingsTableToPdf(pdf) {
-  const pageW = pdf.internal.pageSize.getWidth();
-  const pageH = pdf.internal.pageSize.getHeight();
-  const margin = 10;
-  const contentW = pageW - margin * 2;
-  const colLabelW = contentW * 0.60;
-  const colValueW = contentW - colLabelW;
-  const lineH = 4.2;
-  const rows = buildActiveSettingsRowsForPdf();
-  const title = LANG === 'zh' ? '目前啟用設定（僅目前情境）' : 'Active Settings (Current Scenario Only)';
-
-  let y = margin;
-  pdf.addPage();
-  pdf.setFont('helvetica', 'bold');
-  pdf.setFontSize(14);
-  pdf.text(title, margin, y);
-  y += 6;
-
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(10);
-  const dateTime = new Date().toLocaleString();
-  const scenarioLine = `${LANG === 'zh' ? '情境' : 'Scenario'}: ${getActiveScenarioLabel()}  |  ${LANG === 'zh' ? '匯出時間' : 'Exported'}: ${dateTime}`;
-  pdf.text(scenarioLine, margin, y);
-  y += 6;
-
-  const drawHeader = () => {
-    pdf.setFillColor(230, 235, 242);
-    pdf.rect(margin, y, contentW, 7, 'F');
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(10);
-    pdf.text(LANG === 'zh' ? '參數' : 'Parameter', margin + 2, y + 4.8);
-    pdf.text(LANG === 'zh' ? '目前值' : 'Current Value', margin + colLabelW + 2, y + 4.8);
-    y += 7;
-  };
-
-  drawHeader();
-
-  rows.forEach(item => {
-    if (item.type === 'section') {
-      if (y + 7 > pageH - margin) {
-        pdf.addPage();
-        y = margin;
-        drawHeader();
-      }
-      pdf.setFillColor(245, 247, 250);
-      pdf.rect(margin, y, contentW, 7, 'F');
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(9.5);
-      pdf.text(item.label, margin + 2, y + 4.8);
-      y += 7;
-      return;
-    }
-
-    const labelLines = pdf.splitTextToSize(item.label, colLabelW - 4);
-    const valueLines = pdf.splitTextToSize(item.value, colValueW - 4);
-    const rowLines = Math.max(labelLines.length, valueLines.length);
-    const rowH = Math.max(6, rowLines * lineH + 2);
-
-    if (y + rowH > pageH - margin) {
-      pdf.addPage();
-      y = margin;
-      drawHeader();
-    }
-
-    pdf.setDrawColor(225, 230, 236);
-    pdf.rect(margin, y, contentW, rowH);
-    pdf.line(margin + colLabelW, y, margin + colLabelW, y + rowH);
-
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(9);
-    pdf.text(labelLines, margin + 2, y + 4.2);
-    pdf.text(valueLines, margin + colLabelW + 2, y + 4.2);
-    y += rowH;
-  });
-}
-
-async function exportPDF() {
-  const exportBtn = document.querySelector('.export-btn');
-  const oldLabel = exportBtn ? exportBtn.innerHTML : '';
-  const sb = document.getElementById('sidebar');
-  const sbBtn = document.getElementById('sidebar-toggle');
-  const wasCollapsed = sb ? sb.classList.contains('collapsed') : true;
-
-  try {
-    if (exportBtn) {
-      exportBtn.disabled = true;
-      exportBtn.innerHTML = '<span class="exp-icon">...</span> Exporting';
-      exportBtn.style.opacity = '0.75';
-      exportBtn.style.cursor = 'wait';
-    }
-
-    // Keep cards and reveal sections in deterministic state before capture.
-    document.querySelectorAll('.tech-card.flipped').forEach(c => c.classList.remove('flipped'));
-    document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-
-    // Export a clean layout without the side panel.
-    if (sb && !wasCollapsed) {
-      sb.classList.add('collapsed');
-      if (sbBtn) {
-        sbBtn.textContent = '▶';
-        sbBtn.style.left = '0';
-      }
-    }
-
-    await loadScriptOnce(
-      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-      () => typeof window.html2canvas === 'function'
-    );
-    await loadScriptOnce(
-      'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
-      () => Boolean(window.jspdf && window.jspdf.jsPDF)
-    );
-
-    await wait(160);
-
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: 'l', unit: 'mm', format: 'a4', compress: true });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 10;
-
-    // Summary page: clean KPI layout + high-resolution card captures for readability.
-    const res = calculate(S);
-    const lt = S.lifetime;
-    const summary = [
-      { n: T('bar_ep'), c: '#30C96F', lcoh: res.ep.t, monthly: res.ep.t * S.total_heat / 12, life: res.ep.t * S.total_heat * lt },
-      { n: T('bar_hp'), c: '#F5A623', lcoh: res.hp.t, monthly: res.hp.t * S.total_heat / 12, life: res.hp.t * S.total_heat * lt },
-      { n: T('bar_gas'), c: '#EF6B4A', lcoh: res.gas.t, monthly: res.gas.t * S.total_heat / 12, life: res.gas.t * S.total_heat * lt },
-    ];
-
-    pdf.setFillColor(248, 250, 252);
-    pdf.rect(0, 0, pageW, pageH, 'F');
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(17);
-    pdf.text('EP Heat Cost Calculator - Export', margin, margin);
-    pdf.setFont('helvetica', 'normal');
-    pdf.setFontSize(10);
-    pdf.text(`${LANG === 'zh' ? '情境' : 'Scenario'}: ${getActiveScenarioLabel()}   |   ${LANG === 'zh' ? '匯出時間' : 'Exported'}: ${new Date().toLocaleString()}`, margin, margin + 6);
-
-    let y = margin + 12;
-    const gap = 4;
-    const cardW = (pageW - margin * 2 - gap * 2) / 3;
-    const cardH = 24;
-    summary.forEach((s, i) => {
-      const x = margin + i * (cardW + gap);
-      pdf.setFillColor(255, 255, 255);
-      pdf.setDrawColor(220, 226, 235);
-      pdf.roundedRect(x, y, cardW, cardH, 2.4, 2.4, 'FD');
-      pdf.setFont('helvetica', 'bold');
-      pdf.setFontSize(11);
-      pdf.setTextColor(s.c);
-      pdf.text(s.n, x + 3, y + 6);
-      pdf.setTextColor(20, 23, 28);
-      pdf.setFontSize(13);
-      pdf.text(`${(s.lcoh * 100).toFixed(2)} ct/kWh`, x + 3, y + 13.5);
-      pdf.setFontSize(9.5);
-      pdf.text(`${fmtC(s.monthly)}/month`, x + 3, y + 19);
-      pdf.text(fmtC(s.life), x + cardW - 3, y + 19, { align: 'right' });
-    });
-
-    y += cardH + 6;
-    const chartTop = y;
-    const chartW = (pageW - margin * 3) / 2;
-    const chartH = pageH - chartTop - margin;
-
-    const captureCardImage = async (canvasId) => {
-      const canvasEl = document.getElementById(canvasId);
-      const card = canvasEl ? canvasEl.closest('.card') : null;
-      if (!card || typeof window.html2canvas !== 'function') return null;
-      const shot = await window.html2canvas(card, {
-        backgroundColor: '#FFFFFF',
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        scrollX: 0,
-        scrollY: -window.scrollY,
-        windowWidth: card.scrollWidth,
-        windowHeight: card.scrollHeight
-      });
-      return shot.toDataURL('image/png');
-    };
-
-    const lcohImg = await captureCardImage('lcohChart');
-    const cumImg = await captureCardImage('cumChart');
-    if (lcohImg) pdf.addImage(lcohImg, 'PNG', margin, chartTop, chartW, chartH, undefined, 'FAST');
-    if (cumImg) pdf.addImage(cumImg, 'PNG', margin * 2 + chartW, chartTop, chartW, chartH, undefined, 'FAST');
-
-    // Attach current active settings for the selected scenario only.
-    addActiveSettingsTableToPdf(pdf);
-
-    const date = new Date().toISOString().slice(0, 10);
-    pdf.save(`ep-heat-cost-calculator-${date}.pdf`);
-  } catch (err) {
-    console.error('PDF export failed:', err);
-    alert('PDF export failed. Please try again.');
-  } finally {
-    if (sb && !wasCollapsed) {
-      sb.classList.remove('collapsed');
-      if (sbBtn) {
-        sbBtn.textContent = '«';
-        sbBtn.style.left = '315px';
-      }
-    }
-    if (exportBtn) {
-      exportBtn.disabled = false;
-      exportBtn.innerHTML = oldLabel;
-      exportBtn.style.opacity = '';
-      exportBtn.style.cursor = '';
-    }
-  }
 }
 
 // ── E: Sparklines on hero cards ────────────────────────────────────────────
