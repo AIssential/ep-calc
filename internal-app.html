@@ -124,9 +124,9 @@
     .tc-detail-row.td-total .td-val{font-weight:800;font-size:.82rem}
     .tc-back-section .td-sub{color:var(--accent);font-size:.65rem;font-weight:600}
     .tc-header{padding:16px 16px 0;position:relative;display:flex;flex-direction:column;gap:10px}
-    .tc-header-text{display:flex;flex-direction:column;gap:2px}
-    .tc-header h3{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-    .tc-header .tc-subtitle{font-size:.65rem;color:var(--muted);line-height:1.3}
+    .tc-header-text{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .tc-header h3{font-size:clamp(.84rem,.45vw + .76rem,.96rem);font-weight:800;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tc-header .tc-subtitle{font-size:clamp(.69rem,.32vw + .63rem,.78rem);color:var(--muted);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .tc-media{position:relative;width:100%;aspect-ratio:3/2;margin-bottom:12px;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#101a2c;box-shadow:inset 0 1px 0 rgba(255,255,255,.04), 0 10px 24px rgba(0,0,0,.25)}
     .tc-media::after{content:'';position:absolute;inset:auto 0 0 0;height:36%;background:linear-gradient(180deg, rgba(11,17,32,0) 0%, rgba(11,17,32,.18) 30%, rgba(11,17,32,.72) 100%)}
     .tc-media-art{position:absolute;inset:0;display:flex;align-items:stretch;justify-content:center}
@@ -506,17 +506,6 @@
     <!-- CO2 -->
     <div class="card reveal" id="co2-panel"></div>
 
-    <!-- Derived values -->
-    <div class="derived-row reveal">
-      <div class="derived-card">
-        <div class="dtitle" data-i18n="dv_pv_lcoe">PV LCOE</div>
-        <div class="kv"><span class="k" data-i18n="dv_lcoe_ep">ElephantONE (inverter &amp; battery integrated)</span><span class="v" id="dv-lcoe-ep">—</span></div>
-        <div class="kv"><span class="k" data-i18n="dv_lcoe_hp">Standard HP (with inverter)</span><span class="v" id="dv-lcoe-hp">—</span></div>
-        <div class="kv kv-mt"><span class="k" data-i18n="dv_blend_ep">Blended price ElephantONE</span><span class="v" id="dv-blend-ep">—</span></div>
-        <div class="kv"><span class="k" data-i18n="dv_blend_hp">Blended price Standard HP</span><span class="v" id="dv-blend-hp">—</span></div>
-      </div>
-    </div>
-
     <div class="card">
       <details>
         <summary data-i18n="verify_title">Verification against default parameters</summary>
@@ -610,11 +599,6 @@ const STRINGS = {
     co2_note_pv: 'PV self-consumption credited as zero-carbon',
     co2_note_carbon: 'Carbon price',
     // Derived
-    dv_pv_lcoe: 'PV LCOE',
-    dv_lcoe_ep: 'ElephantONE (inverter & battery integrated)',
-    dv_lcoe_hp: 'Standard HP (with inverter)',
-    dv_blend_ep: 'Blended price ElephantONE',
-    dv_blend_hp: 'Blended price Standard HP',
     dv_energy_demand: 'Annual Energy Demand',
     dv_elec_ep: 'ElephantONE electricity (incl. losses)',
     dv_elec_hp: 'Standard HP electricity',
@@ -784,11 +768,6 @@ const STRINGS = {
     co2_note_gas: '天然氣',
     co2_note_pv: '太陽能自用電力以零碳計算',
     co2_note_carbon: '碳價格',
-    dv_pv_lcoe: 'PV LCOE',
-    dv_lcoe_ep: 'ElephantONE（含逆變器及電池）',
-    dv_lcoe_hp: '標準熱泵（含逆變器）',
-    dv_blend_ep: '混合價格 ElephantONE',
-    dv_blend_hp: '混合價格 標準熱泵',
     dv_energy_demand: '年度能源需求',
     dv_elec_ep: 'ElephantONE 用電（含損耗）',
     dv_elec_hp: '標準熱泵用電',
@@ -2493,17 +2472,6 @@ function renderCO2(res) {
 function updateVppNote() {}
 
 // ── Derived values ─────────────────────────────────────────────────────────
-function updateDerived(res) {
-  const lcoeEp = document.getElementById('dv-lcoe-ep');
-  const lcoeHp = document.getElementById('dv-lcoe-hp');
-  const blendEp = document.getElementById('dv-blend-ep');
-  const blendHp = document.getElementById('dv-blend-hp');
-  if (lcoeEp) lcoeEp.textContent = res.lcoe_ep.toFixed(4) + ' €/kWh';
-  if (lcoeHp) lcoeHp.textContent = res.lcoe_hp.toFixed(4) + ' €/kWh';
-  if (blendEp) blendEp.textContent = res.blend_ep.toFixed(4) + ' €/kWh';
-  if (blendHp) blendHp.textContent = res.blend_hp.toFixed(4) + ' €/kWh';
-}
-
 // ── Verification ───────────────────────────────────────────────────────────
 function renderVerify(res) {
   const EXP = EXPECTED, tol = 0.0002;
@@ -2576,7 +2544,6 @@ function updateAll() {
   renderSavings(res);
   renderCumChart(res);
   renderCO2(res);
-  updateDerived(res);
   renderVerify(res);
   updateVppNote();
   updateValueStackDisplay(res);
