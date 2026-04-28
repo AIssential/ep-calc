@@ -228,7 +228,7 @@
     ::-webkit-scrollbar-thumb:hover{background:#334155}
 
     .scenario-bar{display:flex;gap:6px;padding:6px 20px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
-    .scenario-btn{flex:1;padding:5px 4px;font-size:.65rem;font-weight:800;border:2px solid var(--border);border-radius:5px;cursor:pointer;background:var(--surface2);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;transition:background .15s,border-color .15s,color .15s}
+    .scenario-btn{flex:1;padding:5px 4px;font-size:.65rem;font-weight:800;border:2px solid var(--border);border-radius:5px;cursor:pointer;background:var(--surface2);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
     .scenario-btn:hover{background:var(--border);color:var(--text);border-color:var(--muted)}
     .scenario-btn.active{background:var(--accent);border-color:var(--accent);color:#0B1120}
 
