@@ -228,7 +228,7 @@
     ::-webkit-scrollbar-thumb:hover{background:#334155}
 
     .scenario-bar{display:flex;gap:6px;padding:6px 20px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0}
-    .scenario-btn{flex:1;padding:5px 4px;font-size:.65rem;font-weight:800;border:2px solid var(--border);border-radius:5px;cursor:pointer;background:var(--surface2);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;transition:background .15s,border-color .15s,color .15s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+    .scenario-btn{flex:1;padding:0 4px;min-height:52px;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;border:2px solid var(--border);border-radius:5px;cursor:pointer;background:var(--surface2);color:var(--muted);letter-spacing:.04em;text-transform:uppercase;transition:background .15s,border-color .15s,color .15s}
     .scenario-btn:hover{background:var(--border);color:var(--text);border-color:var(--muted)}
     .scenario-btn.active{background:var(--accent);border-color:var(--accent);color:#0B1120}
 
@@ -403,7 +403,7 @@
       .tech-row{grid-template-columns:1fr}
       .charts-grid{grid-template-columns:1fr}
       .scenario-bar{gap:4px}
-      .scenario-btn{font-size:.6rem;padding:5px 2px}
+      .scenario-btn{font-size:.6rem;padding:0 2px;min-height:52px}
     }
 
     @media print{
