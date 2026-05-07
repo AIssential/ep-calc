@@ -923,23 +923,23 @@ const LIGHT_PARAMS = new Set([
 
 // ── Reference data ─────────────────────────────────────────────────────────
 const BUILDING_CLASSES = [
-  { en:'Passivhaus',                    zh:'被動式房屋',          kwh_m2a: 21.25, tip:{ en:'Very high insulation standard with very low heat demand.', zh:'高保溫標準，全年熱需求非常低。' } },
-  { en:'Effizienzhaus 40',             zh:'高效節能 40',        kwh_m2a: 34.0,  tip:{ en:'High-efficiency modern building with low heating demand.', zh:'高能效新建標準，供暖需求偏低。' } },
-  { en:'Effizienzhaus 55',             zh:'高效節能 55',        kwh_m2a: 46.75, tip:{ en:'Efficient building standard with moderate-low heat demand.', zh:'節能建築標準，熱需求中低。' } },
+  { en:'Passive House',                 zh:'被動式房屋',          kwh_m2a: 21.25, tip:{ en:'Very high insulation standard with very low heat demand.', zh:'高保溫標準，全年熱需求非常低。' } },
+  { en:'Efficiency House 40',          zh:'高效節能 40',        kwh_m2a: 34.0,  tip:{ en:'High-efficiency modern building with low heating demand.', zh:'高能效新建標準，供暖需求偏低。' } },
+  { en:'Efficiency House 55',          zh:'高效節能 55',        kwh_m2a: 46.75, tip:{ en:'Efficient building standard with moderate-low heat demand.', zh:'節能建築標準，熱需求中低。' } },
   { en:'GEG 2020',                      zh:'GEG 2020',           kwh_m2a: 55.25, tip:{ en:'Current German code-compliant baseline for newer buildings.', zh:'符合德國現行法規的新建基準。' } },
-  { en:'Neubau nach EnEV 2002–2009',    zh:'2002–2009 新建',     kwh_m2a: 72.25, tip:{ en:'Older new-build period with weaker insulation than today.', zh:'較早期新建標準，保溫弱於現行規範。' } },
-  { en:'Bestand nach WSchV 95',         zh:'1995 標準',          kwh_m2a:102.0,  tip:{ en:'Existing building upgraded to around 1995 thermal-protection standard.', zh:'既有建築，約達 1995 年保溫規範水準。' } },
-  { en:'Bestand ab 1980',               zh:'1980年後',           kwh_m2a:136.0,  tip:{ en:'Typical older stock from around 1980 with higher heating needs.', zh:'約 1980 年左右既有建物，熱需求較高。' } },
-  { en:'Bestand vor 1978',              zh:'1978年前',           kwh_m2a:195.5,  tip:{ en:'Old building stock with low insulation and high heat demand.', zh:'老舊建築，保溫較弱，熱需求高。' } },
+  { en:'New Build (EnEV 2002-2009)',    zh:'2002–2009 新建',     kwh_m2a: 72.25, tip:{ en:'Older new-build period with weaker insulation than today.', zh:'較早期新建標準，保溫弱於現行規範。' } },
+  { en:'Existing Building (WSchV 95)',  zh:'1995 標準',          kwh_m2a:102.0,  tip:{ en:'Existing building upgraded to around 1995 thermal-protection standard.', zh:'既有建築，約達 1995 年保溫規範水準。' } },
+  { en:'Existing Building (from 1980)', zh:'1980年後',           kwh_m2a:136.0,  tip:{ en:'Typical older stock from around 1980 with higher heating needs.', zh:'約 1980 年左右既有建物，熱需求較高。' } },
+  { en:'Existing Building (before 1978)', zh:'1978年前',         kwh_m2a:195.5,  tip:{ en:'Old building stock with low insulation and high heat demand.', zh:'老舊建築，保溫較弱，熱需求高。' } },
 ];
 
 const HEATING_TYPES = [
-  { en:'Fußbodenheizung (Vorlauf 35°C)',  zh:'地板暖氣 (供水 35°C)',  scop:4.5, tip:{ en:'Low flow temperature floor heating, high heat-pump efficiency.', zh:'低供水溫度地暖，熱泵效率高。' } },
-  { en:'Fußbodenheizung (Vorlauf 30°C)',  zh:'地板暖氣 (供水 30°C)',  scop:4.9, tip:{ en:'Very low flow temperature floor heating, best efficiency case.', zh:'更低供水溫度地暖，效率最佳。' } },
-  { en:'Gemischtes System (VL 45°C)',     zh:'混合系統 (VL 45°C)',    scop:3.2, tip:{ en:'Mixed emitters with medium flow temperature and medium SCOP.', zh:'混合末端，供水溫度中等，SCOP 中等。' } },
-  { en:'Gemischtes System (VL 40°C)',     zh:'混合系統 (VL 40°C)',    scop:3.7, tip:{ en:'Mixed emitters at lower flow temperature with better SCOP.', zh:'較低供水溫度的混合末端，SCOP 較佳。' } },
-  { en:'Alte Radiatoren (VL 50°C)',       zh:'舊式暖氣片 (VL 50°C)', scop:2.8, tip:{ en:'Older radiators need higher flow temperature, reducing efficiency.', zh:'舊暖氣片需較高供水溫度，效率較低。' } },
-  { en:'Alte Radiatoren (VL 60°C)',       zh:'舊式暖氣片 (VL 60°C)', scop:2.4, tip:{ en:'Very high flow temperature radiator system, lowest SCOP case.', zh:'高供水溫度舊暖氣片系統，SCOP 最低。' } },
+  { en:'Underfloor Heating (Flow 35°C)',  zh:'地板暖氣 (供水 35°C)',  scop:4.5, tip:{ en:'Low flow temperature floor heating, high heat-pump efficiency.', zh:'低供水溫度地暖，熱泵效率高。' } },
+  { en:'Underfloor Heating (Flow 30°C)',  zh:'地板暖氣 (供水 30°C)',  scop:4.9, tip:{ en:'Very low flow temperature floor heating, best efficiency case.', zh:'更低供水溫度地暖，效率最佳。' } },
+  { en:'Mixed System (Flow 45°C)',        zh:'混合系統 (VL 45°C)',    scop:3.2, tip:{ en:'Mixed emitters with medium flow temperature and medium SCOP.', zh:'混合末端，供水溫度中等，SCOP 中等。' } },
+  { en:'Mixed System (Flow 40°C)',        zh:'混合系統 (VL 40°C)',    scop:3.7, tip:{ en:'Mixed emitters at lower flow temperature with better SCOP.', zh:'較低供水溫度的混合末端，SCOP 較佳。' } },
+  { en:'Old Radiators (Flow 50°C)',       zh:'舊式暖氣片 (VL 50°C)', scop:2.8, tip:{ en:'Older radiators need higher flow temperature, reducing efficiency.', zh:'舊暖氣片需較高供水溫度，效率較低。' } },
+  { en:'Old Radiators (Flow 60°C)',       zh:'舊式暖氣片 (VL 60°C)', scop:2.4, tip:{ en:'Very high flow temperature radiator system, lowest SCOP case.', zh:'高供水溫度舊暖氣片系統，SCOP 最低。' } },
 ];
 
 const SCENARIO_PRESETS = [
