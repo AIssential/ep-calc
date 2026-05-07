@@ -254,6 +254,7 @@
     .haas-inline{display:flex;align-items:center;gap:4px;padding:2px 0;font-size:.7rem;font-weight:700;color:var(--muted)}
     .haas-hero-top{position:absolute;top:12px;right:16px;z-index:4;background:rgba(22,32,49,.88);border:1px solid var(--border);border-radius:8px;padding:5px 8px}
     .tc-hero-win-badge{position:absolute;top:10px;right:14px;z-index:4;display:flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 30% 28%, #9CF0BE 0%, #30C96F 42%, #1E8F4A 100%);border:2px solid rgba(200,255,222,.9);color:#052312;font-size:1rem;font-weight:900;letter-spacing:.01em;box-shadow:0 10px 20px rgba(0,0,0,.34), inset 0 2px 6px rgba(255,255,255,.35), inset 0 -8px 12px rgba(0,0,0,.18);text-shadow:0 1px 0 rgba(255,255,255,.25)}
+    .tc-hero-win-badge.hp{background:radial-gradient(circle at 30% 28%, #FFE59B 0%, #F5A623 42%, #B46D09 100%);border-color:rgba(255,234,189,.95);color:#2E1C00}
     .tc-hero-win-badge::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(240,255,246,.65)}
     .tc-hero-win-badge::after{content:'';position:absolute;top:10px;left:12px;width:18px;height:9px;border-radius:999px;background:rgba(255,255,255,.45);filter:blur(.5px)}
     .haas-inline input{appearance:none;-webkit-appearance:none;width:10px;height:10px;border-radius:3px;border:1px solid #405168;background:var(--surface2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer;position:relative}
@@ -2338,6 +2339,7 @@ function renderHeroCards(res) {
     } else if (tech.cls === 'hp') {
       costBadge = `<span class="tc-badge hp-badge">${costReductionHP.toFixed(1)}% ${LANG==='zh'?'成本改善 vs 燃氣':'cost reduction vs gas'}</span>`;
       co2Badge = `<span class="tc-badge hp-badge">${co2ReductionHP.toFixed(0)}% ${LANG==='zh'?'CO₂ 改善 vs 燃氣':'CO2 reduction vs gas'}</span>`;
+      heroWinBadge = `<div class="tc-hero-win-badge hp">-${Math.abs(costReductionHP).toFixed(0)}%</div>`;
     } else {
       const gasCostAboveEP = res.ep.t > 0 ? ((res.gas.t - res.ep.t) / res.ep.t * 100) : 0;
       const gasCO2AboveEP  = res.ep.co2 > 0 ? ((res.gas.co2 - res.ep.co2) / res.ep.co2 * 100) : 0;
