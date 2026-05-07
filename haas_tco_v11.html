@@ -253,7 +253,9 @@
     .tc-unit-note{font-size:.64rem;color:var(--muted);margin-top:5px}
     .haas-inline{display:flex;align-items:center;gap:4px;padding:2px 0;font-size:.7rem;font-weight:700;color:var(--muted)}
     .haas-hero-top{position:absolute;top:12px;right:16px;z-index:4;background:rgba(22,32,49,.88);border:1px solid var(--border);border-radius:8px;padding:5px 8px}
-    .tc-hero-win-badge{position:absolute;top:12px;right:16px;z-index:4;display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:999px;background:rgba(48,201,111,.18);border:1px solid rgba(48,201,111,.45);color:var(--ep);font-size:.64rem;font-weight:800;letter-spacing:.01em;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+    .tc-hero-win-badge{position:absolute;top:10px;right:14px;z-index:4;display:flex;align-items:center;justify-content:center;width:62px;height:62px;border-radius:50%;background:radial-gradient(circle at 30% 28%, #9CF0BE 0%, #30C96F 42%, #1E8F4A 100%);border:2px solid rgba(200,255,222,.9);color:#052312;font-size:1rem;font-weight:900;letter-spacing:.01em;box-shadow:0 10px 20px rgba(0,0,0,.34), inset 0 2px 6px rgba(255,255,255,.35), inset 0 -8px 12px rgba(0,0,0,.18);text-shadow:0 1px 0 rgba(255,255,255,.25)}
+    .tc-hero-win-badge::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1px dashed rgba(240,255,246,.65)}
+    .tc-hero-win-badge::after{content:'';position:absolute;top:10px;left:12px;width:18px;height:9px;border-radius:999px;background:rgba(255,255,255,.45);filter:blur(.5px)}
     .haas-inline input{appearance:none;-webkit-appearance:none;width:10px;height:10px;border-radius:3px;border:1px solid #405168;background:var(--surface2);box-shadow:inset 0 1px 0 rgba(255,255,255,.06);cursor:pointer;position:relative}
     .haas-inline input:checked{background:var(--accent);border-color:var(--accent)}
     .haas-inline input:checked::after{content:'';position:absolute;left:2px;top:0px;width:3px;height:6px;border:1px solid #0B1120;border-top:none;border-left:none;transform:rotate(45deg)}
@@ -404,7 +406,7 @@
       .results{padding:10px}
       .card-hdr{flex-direction:column;align-items:flex-start;gap:8px}
       .haas-hero-top{position:static;align-self:flex-end;margin-bottom:4px}
-      .tc-hero-win-badge{position:static;align-self:flex-end;margin:4px 16px 2px 0}
+      .tc-hero-win-badge{position:static;align-self:flex-end;margin:4px 16px 2px 0;width:56px;height:56px;font-size:.92rem}
       .tc-allin-note{font-size:.68rem;line-height:1.24;max-width:100%}
       .tc-allin-break{display:block}
       .tc-header-text{min-height:0}
@@ -754,8 +756,8 @@ const STRINGS = {
     admin_github_commit_failed: 'GitHub sync failed, saved locally.',
   },
   zh: {
-    title: 'ELEPHANT ONE vs 標準熱泵 vs 燃氣鍋爐 — TCO / LCOH 計算器',
-    subtitle: '總持有成本比較',
+    title: 'EP 供暖成本計算器',
+    subtitle: '總擁有成本與 LCOH 比較',
     mode_hint: '模式',
     mode_light: '精簡',
     mode_full: '完整',
@@ -835,11 +837,11 @@ const STRINGS = {
     sc_pessimistic: '悲觀', sc_balanced: '均衡', sc_optimistic: '樂觀',
     pr_passivhaus: '被動式房屋', pr_geg2020: 'GEG 2020', pr_bestand1980: '1980年後', pr_altbau: '1978年前',
     bc_0: '被動式房屋',            bc_1: '高效節能 40',         bc_2: '高效節能 55',
-    bc_3: 'GEG 2020',              bc_4: '2002–2009 新建',      bc_5: '1995 標準',
+    bc_3: 'GEG 2020',              bc_4: '2002-2009 年新建',    bc_5: '1995 年標準',
     bc_6: '1980年後',              bc_7: '1978年前',
     ht_0: '地板暖氣 (供水 35°C)',  ht_1: '地板暖氣 (供水 30°C)',
-    ht_2: '混合系統 (VL 45°C)',    ht_3: '混合系統 (VL 40°C)',
-    ht_4: '舊式暖氣片 (VL 50°C)', ht_5: '舊式暖氣片 (VL 60°C)',
+    ht_2: '混合系統 (供水 45°C)',  ht_3: '混合系統 (供水 40°C)',
+    ht_4: '舊式暖氣片 (供水 50°C)', ht_5: '舊式暖氣片 (供水 60°C)',
     fin_buy: '購買', fin_haas: 'HaaS 租賃',
     bc_label: '建築類別', ht_label: '暖氣系統類型（設定 SCOP）',
     bc_area: '居住面積', bc_persons: '人數', bc_computed: '→ 計算熱需求',
@@ -936,10 +938,10 @@ const BUILDING_CLASSES = [
 const HEATING_TYPES = [
   { en:'Underfloor Heating (Flow 35°C)',  zh:'地板暖氣 (供水 35°C)',  scop:4.5, tip:{ en:'Low flow temperature floor heating, high heat-pump efficiency.', zh:'低供水溫度地暖，熱泵效率高。' } },
   { en:'Underfloor Heating (Flow 30°C)',  zh:'地板暖氣 (供水 30°C)',  scop:4.9, tip:{ en:'Very low flow temperature floor heating, best efficiency case.', zh:'更低供水溫度地暖，效率最佳。' } },
-  { en:'Mixed System (Flow 45°C)',        zh:'混合系統 (VL 45°C)',    scop:3.2, tip:{ en:'Mixed emitters with medium flow temperature and medium SCOP.', zh:'混合末端，供水溫度中等，SCOP 中等。' } },
-  { en:'Mixed System (Flow 40°C)',        zh:'混合系統 (VL 40°C)',    scop:3.7, tip:{ en:'Mixed emitters at lower flow temperature with better SCOP.', zh:'較低供水溫度的混合末端，SCOP 較佳。' } },
-  { en:'Old Radiators (Flow 50°C)',       zh:'舊式暖氣片 (VL 50°C)', scop:2.8, tip:{ en:'Older radiators need higher flow temperature, reducing efficiency.', zh:'舊暖氣片需較高供水溫度，效率較低。' } },
-  { en:'Old Radiators (Flow 60°C)',       zh:'舊式暖氣片 (VL 60°C)', scop:2.4, tip:{ en:'Very high flow temperature radiator system, lowest SCOP case.', zh:'高供水溫度舊暖氣片系統，SCOP 最低。' } },
+  { en:'Mixed System (Flow 45°C)',        zh:'混合系統 (供水 45°C)',  scop:3.2, tip:{ en:'Mixed emitters with medium flow temperature and medium SCOP.', zh:'混合末端，供水溫度中等，SCOP 中等。' } },
+  { en:'Mixed System (Flow 40°C)',        zh:'混合系統 (供水 40°C)',  scop:3.7, tip:{ en:'Mixed emitters at lower flow temperature with better SCOP.', zh:'較低供水溫度的混合末端，SCOP 較佳。' } },
+  { en:'Old Radiators (Flow 50°C)',       zh:'舊式暖氣片 (供水 50°C)', scop:2.8, tip:{ en:'Older radiators need higher flow temperature, reducing efficiency.', zh:'舊暖氣片需較高供水溫度，效率較低。' } },
+  { en:'Old Radiators (Flow 60°C)',       zh:'舊式暖氣片 (供水 60°C)', scop:2.4, tip:{ en:'Very high flow temperature radiator system, lowest SCOP case.', zh:'高供水溫度舊暖氣片系統，SCOP 最低。' } },
 ];
 
 const SCENARIO_PRESETS = [
@@ -2328,7 +2330,7 @@ function renderHeroCards(res) {
     if (tech.cls === 'ep') {
       costBadge = `<span class="tc-badge ep-badge">${costReductionEP.toFixed(1)}% ${LANG==='zh'?'成本改善 vs 燃氣':'cost reduction vs gas'}</span>`;
       co2Badge = `<span class="tc-badge ep-badge">${co2ReductionEP.toFixed(0)}% ${LANG==='zh'?'CO₂ 改善 vs 燃氣':'CO2 reduction vs gas'}</span>`;
-      heroWinBadge = `<div class="tc-hero-win-badge">-${Math.abs(costReductionEP).toFixed(1)}% ${LANG==='zh'?'節省（vs 燃氣鍋爐）':'savings vs gas boiler'}</div>`;
+      heroWinBadge = `<div class="tc-hero-win-badge">-${Math.abs(costReductionEP).toFixed(0)}%</div>`;
       const initLabel = initDiffPct >= 0
         ? `${initDiffPct.toFixed(0)}% ${LANG==='zh'?'初始成本低於標準熱泵':'lower initial cost vs HP'}`
         : `${Math.abs(initDiffPct).toFixed(0)}% ${LANG==='zh'?'初始成本高於標準熱泵':'higher initial cost vs HP'}`;
