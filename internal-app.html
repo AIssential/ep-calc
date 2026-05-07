@@ -3,7 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="0; url=haas_tco_v11.html">
   <title>EP Heat Cost Calculator</title>
+  <script>
+    // Keep legacy links working by forwarding to the latest calculator build.
+    (function () {
+      var target = 'haas_tco_v11.html' + window.location.search + window.location.hash;
+      if (!window.location.pathname.endsWith('/haas_tco_v11.html')) {
+        window.location.replace(target);
+      }
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
